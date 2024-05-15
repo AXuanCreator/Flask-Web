@@ -127,7 +127,7 @@
 ## [Optional] 测试
 
 1. 在项目目录下新建`test.py`，并复制以下内容
-   
+
     ```python
     from flask import Flask
       
@@ -144,9 +144,11 @@
 
 2. 选择PyCharm上方的 **当前文件 > 编辑配置**
 
-	<img src="README.assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
+  <img src="README.assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
 
 3. 点击 **+号**，并选择 **Flask服务器**
+
+    * 经测试，选择**Python**配置完成以下相同步骤也可以执行
 
     <img src="README.assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
 
@@ -155,12 +157,10 @@
     <img src="README.assets/image-20240515150700126.png" alt="image-20240515150700126" style="zoom:50%;" />
 
 5. Debug，并打开网址:http://127.0.0.1:5000，显示`Hello World`
-   
+
     <img src="README.assets/image-20240515150820288.png" alt="image-20240515150820288" style="zoom: 80%;" />
 
 ​       
-
-
 
 ## Flask-Web项目构建
 
