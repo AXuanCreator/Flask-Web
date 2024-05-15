@@ -14,13 +14,13 @@ def hello_world():  # put application's code here
 
 if __name__ == '__main__':
     # 无参数启动
-    # app.run()
+    app.run()
 
     # Debug模式
     # app.run(debug=True)
 
     # 修改主机
-    # app.run(host='10.201.82.226')
+    # app.run(host='xx.xx.xx.xx')
 
     # 修改端口号
-    app.run(port=5001)
+    # app.run(port=5001)
