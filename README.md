@@ -8,6 +8,28 @@
 
 
 
+## 项目文件结构
+
+Flask-Web
+
+——Demo **例子**
+
+————Demo_1 **Flask的Debug模式、Host | Port修改**
+
+
+
+——Docs **文档**
+
+————问题大全.md **项目出现报错是可以到这个文件 Ctrl + F 搜索一下**
+
+————Demo解析.md **Demo的例子解析，关于Flask的知识点**
+
+
+
+
+
+
+
 ## 环境配置
 
 **Windows 11**
@@ -151,6 +173,7 @@
     * 经测试，选择**Python**配置完成以下相同步骤也可以执行
     * Python配置和Flask服务器配置各有优缺点
         * Python配置**Debug(虫子标志)**会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。Python配置方式详细看[Python运行配置](./Docs/问题大全.md#2.在app.run()传入参数后没有生效)
+        * Flask服务器配置在**Debug(虫子标志)**和**Run(三角形标志)** 都能够正常运行，但无法向`app.run()`传入参数，会无法识别
 
 
 <img src="README.assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
