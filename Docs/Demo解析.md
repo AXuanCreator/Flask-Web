@@ -89,13 +89,13 @@ if __name__ == '__main__':
 
 * 片段标识符：`section1`
 
-    ```http
+    ```cmd
     https://www.example.com:443/path/to/resource?param1=value1&param2=value2#section1
     ```
 
 对于`https://`协议而言，默认端口是443。在输入URL时，可以忽略端口
 
-```
+```cmd
 https://www.example.com/path/to/resource?param1=value1&param2=value2#section1
 ```
 
@@ -103,7 +103,7 @@ https://www.example.com/path/to/resource?param1=value1&param2=value2#section1
 
 ### 视图函数
 
-视图函数负责处理从客户端发送来的请求，并执行相应的逻辑，再返回一个HTTP响应给客户端。简单来说：**当设定的条件被触发时，会执行函数(这个函数被称之为视图函数)，并返回一些内容**
+视图函数负责处理从客户端发送来的请求，并执行相应的逻辑，再返回一个HTTP响应给客户端。简单来说：**当进入某路径时，会执行函数(这个函数被称之为视图函数)，并返回一些内容**
 
 视图函数由 `@app.route()` 定义
 
@@ -166,13 +166,22 @@ def firefly():
 ```python
 @app.route('/firefly/<ff_id>')
 def firefly_id(ff_id):
-def firefly_id(ff_id):
 	return 'Firefly ID: %s' % ff_id
 ```
 
 * ff_id ：使用尖括号，因此ff_id为参数，在调用firefly_id中传入
 
-此时，URL可以为：
+
+
+**语法：**
+
+URL：`PATH/<参数名>`
+
+视图函数：`def function(参数名)`
+
+
+
+**例子：**
 
 `http://127.0.0.1:5000/firefly/1`
 
@@ -198,16 +207,20 @@ def firefly_id_num(ff_id, ff_num):
 	return 'Firefly ID: %s, Num: %d' % (ff_id, ff_num)
 ```
 
-* 语法 `<类型名:参数名>`
 * `ff_id`可以为任意类型
 * `ff_num`被限制为 INT类型
-    * 类型名可以为：
-        * **string** : 字符串类型，可以接受除 `/` 之外的字符
-        * **int** ： 整形
-        * **float** ：浮点型
-        * **path** ：路径，类似于string，但可以接受 `/`
-        * **uuid** ：一组32位数的16进制
-        * **any(A, B, C)** : A、B、C类型中的其中一种
+
+**语法：**
+
+ `<类型名:参数名>`
+
+* 类型名可以为：
+    * **string** : 字符串类型，可以接受除 `/` 之外的字符
+    * **int** ： 整形
+    * **float** ：浮点型
+    * **path** ：路径，类似于string，但可以接受 `/`
+    * **uuid** ：一组32位数的16进制
+    * **any(A, B, C)** : A、B、C类型中的其中一种
 
 
 
@@ -235,7 +248,7 @@ def book_list():  # 注意，这里并没有传入参数
 
 URL调用 : ` [PATH]?参数名=参数值`
 
-视图函数获取 : `request.args.get(参数名，default=默认值，type=类型)`
+视图函数获取参数 : `request.args.get(参数名，default=默认值，type=类型)`
 
 
 

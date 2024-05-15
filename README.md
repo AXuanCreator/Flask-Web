@@ -2,9 +2,15 @@
 
 ## 项目介绍
 
-占位---
+**本项目强烈建议Clone下来阅览**
 
-你是否承认，流萤小姐的盛世美貌盖世无双!
+markdown：可以用 PyCharm直接打开  ||  VSCode装markdown插件查看  ||  VNote  ||  Typora
+
+Demo文件夹的例子均为可以调用，入口均为app.py
+
+
+
+~~你是否承认，流萤小姐的盛世美貌盖世无双!~~
 
 
 
@@ -14,7 +20,9 @@ Flask-Web
 
 ——Demo **例子**
 
-————Demo_1 **Flask的Debug模式、Host | Port修改**
+————Demo_1 **Debug模式、Host | Port修改**
+
+————Demo_2 **URL与视图函数**
 
 
 
