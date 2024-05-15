@@ -149,8 +149,11 @@
 3. 点击 **+号**，并选择 **Flask服务器**
 
     * 经测试，选择**Python**配置完成以下相同步骤也可以执行
+    * Python配置和Flask服务器配置各有优缺点
+        * Python配置**Debug(虫子标志)**会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。Python配置方式详细看[Python运行配置](./Docs/问题大全.md#2.在app.run()传入参数后没有生效)
 
-    <img src="README.assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
+
+<img src="README.assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
 
 4. 填写相应信息
 
