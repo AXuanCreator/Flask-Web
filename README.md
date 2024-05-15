@@ -130,21 +130,21 @@
    
     ```python
     from flask import Flask
-   
+      
     # 创建Flask应用实例
     app = Flask(__name__)
-   
+      
     @app.route('/')
     def hello_world():
         return 'Hello, World!'
-   
+      
     if __name__ == '__main__':
         app.run(debug=True)
     ```
 
 2. 选择PyCharm上方的 **当前文件 > 编辑配置**
 
-        ![image-20240515145549662](README.assets/image-20240515145549662.png)
+	<img src="README.assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
 
 3. 点击 **+号**，并选择 **Flask服务器**
 
