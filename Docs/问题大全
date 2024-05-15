@@ -1,0 +1,19 @@
+# 文件无法找到/打开：[Errno 2] No such file or directory  /  can't open file
+
+## 报错内容
+
+```bash
+ * Restarting with stat
+C:\Users\AXuan\.conda\envs\flask-web\python.exe: can't open file '
+D:\\Program_Work\\Setup-Jetbrains\\Pycharm\\PyCharm': [Errno 2] No such file or directory
+```
+
+## 解决方案
+
+不使用调试模式，直接运行![image-20240515170134854](问题大全.assets/image-20240515170134854.png)
+
+
+
+# 在app.run()传入参数后没有生效
+
+...
