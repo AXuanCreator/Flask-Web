@@ -91,10 +91,10 @@ Flask-Web
 4. 打开CMD并导航到项目目录
 
     ```bash
-    cd /PATH/TO/Project
-    
-    # 查看Conda是否成功安装
+   # 键盘按Win + R键，输入cmd按回车，再输入以下内容
     conda --version
+   # 如果输出conda和对应版本号，说明安装成功
+    
     ```
 
     
