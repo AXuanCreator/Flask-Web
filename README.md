@@ -46,6 +46,8 @@ Flask-Web
 
 1. 下载Miniconda
 
+   > Miniconda是一个用于管理Python虚拟环境的工具，在不同项目之间可以将环境隔离。流萤小姐极力推荐
+
     ```
     https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
     ```
@@ -55,7 +57,7 @@ Flask-Web
 
     
 
-2. 将Miniconda添加至环境变量中
+3. 将Miniconda添加至环境变量中
 
     * 按下Windows键，在搜索框内搜索 **编辑系统环境变量**，选择 **环境变量(N)...**
 
@@ -86,7 +88,7 @@ Flask-Web
 
     
 
-3. 打开CMD并导航到项目目录
+4. 打开CMD并导航到项目目录
 
     ```bash
     cd /PATH/TO/Project
@@ -97,7 +99,7 @@ Flask-Web
 
     
 
-4. 创建虚拟环境
+5. 创建虚拟环境
 
     ```bash
     conda create -n flask-web python=3.10 -y
@@ -109,7 +111,7 @@ Flask-Web
 
     
 
-5. 编译器配置
+6. 编译器配置
 
     * 下载安装Pycharm Community
 
