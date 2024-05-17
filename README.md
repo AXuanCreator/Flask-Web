@@ -57,7 +57,7 @@ Flask-Web
 
     
 
-3. 将Miniconda添加至环境变量中
+2. 将Miniconda添加至环境变量中
 
     * 按下Windows键，在搜索框内搜索 **编辑系统环境变量**，选择 **环境变量(N)...**
 
@@ -88,7 +88,7 @@ Flask-Web
 
     
 
-4. 打开CMD并导航到项目目录
+3. 打开CMD并导航到项目目录
 
     ```bash
    # 键盘按Win + R键，输入cmd按回车，再输入以下内容
@@ -99,8 +99,10 @@ Flask-Web
 
     
 
-5. 创建虚拟环境
-
+4. 创建虚拟环境
+   * 按Win + R键输入cmd然后回车，再依次输入下列内容
+     
+ 
     ```bash
     conda create -n flask-web python=3.10 -y
     
@@ -111,7 +113,7 @@ Flask-Web
 
     
 
-6. 编译器配置
+5. 编译器配置
 
     * 下载安装Pycharm Community
 
