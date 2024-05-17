@@ -88,21 +88,20 @@ Flask-Web
 
     
 
-3. 打开CMD并导航到项目目录
+3. 查看是否成功安装Miniconda
 
     ```bash
    # 键盘按Win + R键，输入cmd按回车，再输入以下内容
     conda --version
    # 如果输出conda和对应版本号，说明安装成功
+   ```
+   
     
-    ```
-
-    
-
+   
 4. 创建虚拟环境
    * 按Win + R键输入cmd然后回车，再依次输入下列内容
      
- 
+
     ```bash
     conda create -n flask-web python=3.10 -y
     
@@ -155,7 +154,7 @@ Flask-Web
             <img src="README.assets/image-20240515144222714.png" alt="image-20240515144222714" style="zoom: 50%;" />
         
             
-    
+
     
 
 ## [Optional] 测试
