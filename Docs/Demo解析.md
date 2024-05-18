@@ -746,7 +746,7 @@ def delete_user():
 
 
 
-# DEMO_4
+# Demo_4
 
 >   知识点：**ORM模型 外键与表 的关系** 
 >
@@ -838,7 +838,7 @@ class Article(db.Model):
 
 
 
-## 代码例子
+## 示例
 
 ```python
 from flask import Flask
@@ -854,7 +854,7 @@ PORT = '3306'
 # MySQL的用户名，在安装MySQL时由用户创建
 USERNAME = 'root'
 # MySQL的密码，在安装MySQL时由用户创建
-PASSWORD = 'x'x'x'x'
+PASSWORD = 'xxxx'
 # MySQL的数据库名
 DATABASE = 'flask-web'
 
@@ -931,7 +931,7 @@ if __name__ == '__main__':
 
 
 
-## 运行
+### 运行
 
 1. 在首次运行中，会自动给 `flask-web` 架构添加两个新表：`author`和`article`
 
@@ -948,4 +948,171 @@ if __name__ == '__main__':
 4. 此时，由于relationship的原因，可以通过访问 `.articles` 来获取指定作者的所有文章记录。访问 [127.0.0.1:5000/get_author/1](http://127.0.0.1:5000/get_author/1)获取
 
     ![image-20240518214109899](Demo解析.assets/image-20240518214109899.png)
+
+
+
+
+
+# Demo_5
+
+>   知识点：**更好的ORM模型映射表的方法** 
+>
+> 代码位置：Flask-Web/Demo/Demo_5/app.py
+
+## db.create_all()的局限性
+
+在Demo3和Demo4，我们使用了一下语句来将ORM模型同步到数据库中
+
+```python
+with app.app_context():
+	db.create_all()
+```
+
+db.create_all()的确可以将 **新增的ORM模型** 映射至数据库，但是，若我们想要修改ORM模型中的字段，此时db.create_all()并不会将其同步，如：
+
+```python
+class Author(db.Model):
+	__tablename__ = 'author'
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	name = db.Column(db.String(80), nullable=False)
+
+with app.app_context():
+	db.create_all()
+```
+
+![image-20240518221901644](Demo解析.assets/image-20240518221901644.png)
+
+修改Author模型，新增一个age字段
+
+```python
+class Author(db.Model):
+	__tablename__ = 'author'
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	name = db.Column(db.String(80), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+
+with app.app_context():
+	db.create_all()
+```
+
+此时，数据库中author表依旧为原样，无任何改变
+
+![image-20240518221924399](Demo解析.assets/image-20240518221924399.png)
+
+因此，我们需要用到一个新的库，名为`flask-migrate`
+
+
+
+## Migrate对象
+
+Migrate对象提供了 **数据库迁移** 的功能。数据库迁移是指在开发过程中对数据库模型的改变（如添加新表、修改表结构等）后，能够方便地同步这些改变到数据库中，保持数据库与代码模型的一致性。Migrate对象来自 `flask-migrate`
+
+### 迁移步骤
+
+1. 创建Migrate对象，并传入app和db
+
+    ```python
+    migrate = Migrate(app, db)
+    ```
+
+2. 创建迁移仓库，在操作将会在项目目录下创建一个`migrations`文件夹，用于存放迁移脚本。该步骤仅需 **执行一次**，无需在每次ORM模型更新后执行
+
+    ```bash
+    # 使用终端输入以下指令
+    flask db init
+    ```
+
+3. 生成迁移脚本。该指令会根据ORM模型生成迁移脚本，在每次更新ORM模型后 **都要执行**
+
+    ```bash
+    # 使用终端
+    flask db migrate
+    ```
+
+4. 将迁移脚本同步到数据库中，在每次更新ORM模型后 **都要执行**
+
+    ```bash
+    # 使用终端
+    flask db upgrade
+    ```
+
+
+
+## 示例
+
+### 原数据库
+
+![image-20240518222859675](Demo解析.assets/image-20240518222859675.png)
+
+### 更改代码——新增age字段
+
+```python
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+## 设置app.config中关于数据库的参数
+## SQLAlchemy(app)会自动从app.config中读取数据库的配置
+# MySQL所在的主机名
+HOSTNAME = '127.0.0.1'
+# MySQL的监听端口号，默认3306
+PORT = '3306'
+# MySQL的用户名，在安装MySQL时由用户创建
+USERNAME = 'root'
+# MySQL的密码，在安装MySQL时由用户创建
+PASSWORD = 'xxxx'
+# MySQL的数据库名
+DATABASE = 'flask-web'
+
+# 创建app应用
+app = Flask(__name__)
+# 应用到app.config中
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
+# 连接SQLAlchemy到Flask应用
+db = SQLAlchemy(app)
+
+# 使用Migrate对象将ORM模型映射成表需要四步
+# 1. 创建Migrate对象，并传入app和db
+# 2. 在命令行中输入 flask db init 初始化迁移仓库，会在项目目录下生成一个migrations文件夹。该步骤仅需执行一次
+# 3. 在命令行中输入 flask db migrate 生成迁移脚本，该步 骤会根据ORM模型生成迁移脚本，需要每次更新ORM模型后执行
+# 4. 在命令行中输入 flask db upgrade 将迁移脚本同步到数据库中，需要每次更新ORM模型后执行
+migrate = Migrate(app, db)
+
+# 表：作者
+class Author(db.Model):
+	__tablename__ = 'author'
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	name = db.Column(db.String(80), nullable=False)
+	age = db.Column(db.Integer, nullable=False)  # 此字段为新增的
+
+with app.app_context():
+	db.create_all()
+
+
+if __name__ == '__main__':
+	app.run()
+
+```
+
+
+
+### 使用Migrate对象迁移ORM模型
+
+1. **flask db init**
+
+    * 需要先进入到app.py所在的目录，即Demo_5。可使用cd指令
+
+    ![image-20240518223144066](Demo解析.assets/image-20240518223144066.png)
+
+2. **flask db migrate**
+
+![image-20240518223244494](Demo解析.assets/image-20240518223244494.png)
+
+3. **flask db upgrade**
+
+    * 可以发现，多了一个`alembic_version`表，这个表用于记录当前数据库对应着哪个迁移仓库的版本。一般而言，可以忽略
+
+    ![image-20240518223310921](Demo解析.assets/image-20240518223310921.png)
+
+<img src="Demo解析.assets/image-20240518223448646.png" alt="image-20240518223448646" style="zoom:80%;" />
 
