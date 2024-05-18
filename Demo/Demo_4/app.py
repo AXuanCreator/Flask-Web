@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
 
 ## 设置app.config中关于数据库的参数
 ## SQLAlchemy(app)会自动从app.config中读取数据库的配置
