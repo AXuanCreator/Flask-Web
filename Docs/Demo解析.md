@@ -955,7 +955,7 @@ if __name__ == '__main__':
 
 # Demo_5
 
->   知识点：**更好的ORM模型映射表的方法** 
+>   知识点：**更好的ORM模型映射至表的方法** 
 >
 > 代码位置：Flask-Web/Demo/Demo_5/app.py
 

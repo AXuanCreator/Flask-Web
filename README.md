@@ -10,6 +10,14 @@ Demo文件夹的例子均为可以调用，入口均为app.py
 
 
 
+TODO：
+
+1.英文/俄语的Readme.md
+
+2.Demo整合
+
+3.软件推荐
+
 ~~你是否承认，流萤小姐的盛世美貌盖世无双!~~
 
 
@@ -24,13 +32,21 @@ Flask-Web
 
 ————Demo_2 **URL与视图函数**
 
+————Demo_3 **Flask与数据库的连接 | ORM模型**
+
+————Demo_4 **ORM模型外键与表的关系**
+
+————Demo_5 **更好的ORM模型映射表的方法**
+
 
 
 ——Docs **文档**
 
 ————QA.md **项目出现报错时可以到这个文件 Ctrl + F 搜索一下**
 
-————Demo解析.md **Demo的例子解析，关于Flask的知识点**
+————Demo解析.md **Demo的例子解析，认真阅读即可熟悉Flask框架**
+
+————扩展信息.md **杂项**
 
 
 
@@ -107,11 +123,13 @@ Flask-Web
     
     conda activate flask-web
     
-    conda install flask -y 
+    conda install flask pymysql flask-sqlalchemy flask-mygrate -y 
+    
+    pip install flask-migrate
     ```
 
     
-
+   
 5. 编译器配置
 
     * 下载安装Pycharm Community
@@ -157,7 +175,7 @@ Flask-Web
 
     
 
-## [Optional] 测试
+## [可选] 测试
 
 1. 在项目目录下新建`test.py`，并复制以下内容
 
@@ -179,11 +197,11 @@ Flask-Web
 
   <img src="README.assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
 
-3. 点击 **+号**，并选择 **Flask服务器**
+3. 点击 **+号**，并选择 **Flask服务器**，推荐跳转至[Python运行配置](./Docs/QA.md#2.在app.run()传入参数后没有生效)使用Python配置方式
 
     * 经测试，选择**Python**配置完成以下相同步骤也可以执行
     * Python配置和Flask服务器配置各有优缺点
-        * Python配置 **Debug(虫子标志)** 会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。Python配置方式详细看[Python运行配置](./Docs/问题大全.md#2.在app.run()传入参数后没有生效)
+        * **[推荐]** Python配置 **Debug(虫子标志)** 会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。Python配置方式详细看[Python运行配置](./Docs/QA.md#2.在app.run()传入参数后没有生效)
         * Flask服务器配置在**Debug(虫子标志)**和**Run(三角形标志)** 都能够正常运行，但无法向`app.run()`传入参数，会无法识别
 
 
