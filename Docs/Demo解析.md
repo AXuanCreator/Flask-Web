@@ -744,3 +744,208 @@ def delete_user():
 
 
 
+
+
+# DEMO_4
+
+>   知识点：**ORM模型 外键与表 的关系** 
+>
+> 代码位置：Flask-Web/Demo/Demo_4/app.py
+
+
+
+## 外键
+
+关系型数据库中一种重要的约束，用于建立表与表之间的关联关系。它定义了一个字段或一组字段，这些字段的值必须与另一个表中的主键或唯一键的值匹配
+
+### MySQL中的外键
+
+```mysql
+FOREIGN KEY <字段名A> REFERENCES <表名>(<字段名B>)
+```
+
+```mysql
+CREATE TABLE author (
+    id INT PRIMARY KEY,
+    name VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE books (
+    id INT PRIMARY KEY,
+    title VARCHAR(80) NOT NULL,
+    content VARCHAR(80) NOT NULL,
+    author_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(id)
+);
+```
+
+
+
+### SQLAlchemy中的外键
+
+```python
+<字段名A> = db.Column(db.ForeignKey('<表名>.<字段名B>'))
+```
+
+```python
+class Author(db.Model):
+    __tablename__ = 'author'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), nullable=False)
+
+# 表：文章
+class Article(db.Model):
+    __tablename__ = 'article'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    # 添加作者ID的外键
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))  # author_id 为外键，关联author表中的id字段
+```
+
+
+
+## SQLAlchemy的特性：建立模型之间的关系
+
+字段名A将与ORM模型相连接，使得可以通过输出字段名B来方便地获取所有相关的联系。会 **自动处理所有相应的外键关联**
+
+* backred：会自动给ORM模型添加一个字段B，此时可通过 **ORM模型.字段B** 来获取相关信息
+
+```python
+<字段名A> = db.relationship(<ORM模型>, backred=<字段名B>)
+```
+
+```python
+class Author(db.Model):
+    __tablename__ = 'author'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), nullable=False)
+
+# 表：文章
+class Article(db.Model):
+    __tablename__ = 'article'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(80), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    # 添加作者ID的外键
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))  # author_id 为外键，关联author表中的id字段
+    # 模型关系：作者与文章是一对多的关系。会自动处理外键关联
+    # backref：反向引用，会自动给Article模型添加一个articles属性,可以通过Author.articles访问Article表中的数据
+    author = db.relationship('Author',backref='articles')
+```
+
+
+
+## 代码例子
+
+```python
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
+
+## 设置app.config中关于数据库的参数
+## SQLAlchemy(app)会自动从app.config中读取数据库的配置
+# MySQL所在的主机名
+HOSTNAME = '127.0.0.1'
+# MySQL的监听端口号，默认3306
+PORT = '3306'
+# MySQL的用户名，在安装MySQL时由用户创建
+USERNAME = 'root'
+# MySQL的密码，在安装MySQL时由用户创建
+PASSWORD = 'x'x'x'x'
+# MySQL的数据库名
+DATABASE = 'flask-web'
+
+# 创建app应用
+app = Flask(__name__)
+# 应用到app.config中
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
+# 连接SQLAlchemy到Flask应用
+db = SQLAlchemy(app)
+
+# 表：作者
+class Author(db.Model):
+    __tablename__ = 'author'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), nullable=False)
+
+# 表：文章
+class Article(db.Model):
+    __tablename__ = 'article'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(80), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    # 添加作者ID的外键
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))  # author_id 为外键，关联author表中的id字段
+    # 模型关系：作者与文章是一对多的关系。会自动处理外键关联
+    # backref：反向引用，会自动给Article模型添加一个articles属性,可以通过Author.articles访问Article表中的数据
+    author = db.relationship('Author',backref='articles')
+
+# 同步至数据库
+with app.app_context():
+    db.create_all()
+
+@app.route('/add_author/<name>')
+def add_author(name):
+    author = Author(name=name)
+
+    # 添加到db.session中
+    db.session.add(author)
+    # 提交
+    db.session.commit()
+
+    return 'Add Author Success'
+
+@app.route('/add_article')
+def add_article():
+    article_1 = Article(title='Firefly_1', content='我梦见一片焦土')
+    article_1.author = Author.query.get(1)
+    article_2 = Article(title='Firefly_2', content='一株破土而出的新蕊')
+    article_2.author = Author.query.get(1)
+
+    # 添加到db.session中
+    db.session.add(article_1)
+    db.session.add(article_2)
+    # 提交
+    db.session.commit()
+
+    return 'Add Article Success'
+
+@app.route('/get_author/<int:id>')
+def get_article(id):
+    author = Author.query.get(id)
+    articles = author.articles
+
+    for art in articles:
+        print(f'Title:{art.title}, Content:{art.content}')
+
+    return 'Get Articles Success'
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+
+
+## 运行
+
+1. 在首次运行中，会自动给 `flask-web` 架构添加两个新表：`author`和`article`
+
+    ![image-20240518212735515](Demo解析.assets/image-20240518212735515.png)
+
+2. 对`author`表添加记录，访问[127.0.0.1:5000/add_author/sam](http://127.0.0.1:5000/add_author/sam)来添加作者sam
+
+    ![image-20240518213108387](Demo解析.assets/image-20240518213108387.png)
+
+3. 对`article`表添加记录，访问[127.0.0.1:5000/add_article](http://127.0.0.1:5000/add_article)添加article记录
+
+    <img src="Demo解析.assets/image-20240518213910692.png" alt="image-20240518213910692" style="zoom:67%;" />
+
+4. 此时，由于relationship的原因，可以通过访问 `.articles` 来获取指定作者的所有文章记录。访问 [127.0.0.1:5000/get_author/1](http://127.0.0.1:5000/get_author/1)获取
+
+    ![image-20240518214109899](Demo解析.assets/image-20240518214109899.png)
+
