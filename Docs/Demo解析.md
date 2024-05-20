@@ -10,7 +10,7 @@
 
 两种调用方式:
 
-1. 在app.run中传入debug参数
+1. **[推荐]** 在app.run中传入debug参数
 
     * 仅限使用**Python配置文件**
 

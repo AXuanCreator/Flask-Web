@@ -133,11 +133,9 @@ Flask-Web
     pip install flask-migrate
     ```
 
-    
-   
 5. 编译器配置
 
-    * 下载安装Pycharm Community
+    * 下载安装Pycharm Community，注意 **安装路径不能有空格或者特殊字符**
 
         ```bash
         # 下载地址
@@ -146,7 +144,7 @@ Flask-Web
         
     * [Optional] 添加插件
 
-        * 快捷键 `Ctrl + ,` 打开设置
+        * 快捷键 `Ctrl + ,` 或者 `Ctrl + Alt + S` 打开设置
         
         * 选择 **Plugins > Marketplace**
         
@@ -202,24 +200,21 @@ Flask-Web
 
   <img src="assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
 
-3. 点击 **+号**，并选择 **Flask服务器**，推荐跳转至[Python运行配置](./Docs/QA.md#2.在app.run()传入参数后没有生效)使用Python配置方式
+3. 点击 **+号**，并选择 **Python**
 
-    * 经测试，选择**Python**配置完成以下相同步骤也可以执行
-    * Python配置和Flask服务器配置各有优缺点
-        * **[推荐]** Python配置 **Debug(虫子标志)** 会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。Python配置方式详细看[Python运行配置](./Docs/QA.md#2.在app.run()传入参数后没有生效)
-        * Flask服务器配置在**Debug(虫子标志)**和**Run(三角形标志)** 都能够正常运行，但无法向`app.run()`传入参数，会无法识别
+    * Python配置 **Debug(虫子标志)** 会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。./Docs/QA.md#2.在app.run()传入参数后没有生效)
 
-<img src="assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
+![image-20240520160701474](assets/image-20240520160701474.png)
 
 4. 填写相应信息
 
-    <img src="assets/image-20240515150700126.png" alt="image-20240515150700126" style="zoom:50%;" />
+    ![image-20240520160723011](assets/image-20240520160723011.png)
 
-5. Debug，并打开网址:http://127.0.0.1:5000 ，显示`Hello World`
+5. **RUN**，并打开网址:http://127.0.0.1:5000 ，显示`Hello World`
 
-    <img src="assets/image-20240515150820288.png" alt="image-20240515150820288" style="zoom: 80%;" />
+    ![image-20240520160741995](assets/image-20240520160741995.png)
 
-​       
+   
 
 ## Flask-Web项目构建
 
