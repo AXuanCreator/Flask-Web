@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Options</title>
+</head>
+<body>
+<h1>Choose an Option:</h1>
+<ul>
+    <li><a href="{{ url_for('user.add_user') }}">Add</a></li>
+    <li><a href="{{ url_for('user.update_user') }}">Update</a></li>
+    <li><a href="{{ url_for('user.delete_user') }}">Delete</a></li>
+</ul>
+</body>
+</html>
