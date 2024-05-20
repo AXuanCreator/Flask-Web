@@ -123,7 +123,7 @@ Flask-Web
     
     conda activate flask-web
     
-    conda install flask pymysql flask-sqlalchemy flask-mygrate -y 
+    conda install flask pymysql flask-sqlalchemy -y 
     
     pip install flask-migrate
     ```

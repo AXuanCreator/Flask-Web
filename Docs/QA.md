@@ -10,7 +10,7 @@ D:\\Program_Work\\Setup-Jetbrains\\Pycharm\\PyCharm': [Errno 2] No such file or 
 
 ## 解决方案
 
-不使用调试模式，直接运行![image-20240515170134854](QA.assets/image-20240515170134854.png)
+不使用调试模式，直接运行![image-20240515170134854](assets/image-20240515170134854.png)
 
 
 
@@ -18,7 +18,7 @@ D:\\Program_Work\\Setup-Jetbrains\\Pycharm\\PyCharm': [Errno 2] No such file or 
 
 ## 问题内容
 
-<img src="QA.assets/image-20240515203521623.png" alt="image-20240515203521623" style="zoom: 67%;" />
+<img src="assets/image-20240515203521623.png" alt="image-20240515203521623" style="zoom: 67%;" />
 
 
 
@@ -32,15 +32,15 @@ D:\\Program_Work\\Setup-Jetbrains\\Pycharm\\PyCharm': [Errno 2] No such file or 
 
 1. 新建Python运行配置文件
 
-    <img src="QA.assets/image-20240515203711804.png" alt="image-20240515203711804" style="zoom: 80%;" />
+    <img src="assets/image-20240515203711804.png" alt="image-20240515203711804" style="zoom: 80%;" />
 
-    <img src="QA.assets/image-20240515203908223.png" alt="image-20240515203908223" style="zoom: 50%;" />
+    <img src="assets/image-20240515203908223.png" alt="image-20240515203908223" style="zoom: 50%;" />
 
     2.选择 **运行**
 
     * 注意，若使用Python的配置文件，则**不可以选择Debug**
 
-    ![image-20240515204119191](QA.assets/image-20240515204119191.png)
+    ![image-20240515204119191](assets/image-20240515204119191.png)
 
     
 
