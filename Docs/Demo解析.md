@@ -1116,3 +1116,99 @@ if __name__ == '__main__':
 
 <img src="assets/image-20240518223448646.png" alt="image-20240518223448646" style="zoom:80%;" />
 
+
+
+
+
+# Demo_6
+
+>  知识点：**蓝图** 
+>
+> 代码位置：Flask-Web/Demo/Demo_6/app.py 
+
+本Demo主要阐述蓝图的意义
+
+蓝图的意义：
+
+* 更好的管理 **路由**
+* 将不同功能的Controller层分成多个文件
+
+
+
+## 创建蓝图
+
+```python
+from flask import Blueprint
+
+bp = Blueprint(<蓝图唯一标识名>, __name__)
+```
+
+
+
+## 将蓝图绑定app
+
+```python
+app.register_blueprint(bp)  # 无前缀url
+
+app.register_blueprint(bp, url_prefix='/api') # 前缀url /api，表示任何路由都会有一个前缀
+```
+
+
+
+## 示例
+
+### 代码
+
+```python
+#############################################################
+# Demo_6 实现一个简单的蓝图功能
+# 蓝图位于 from flask import Blueprint
+#############################################################
+from flask import Blueprint, Flask
+
+app = Flask(__name__)
+
+bp1 = Blueprint('bp1', __name__)
+bp2 = Blueprint('bp2', __name__)
+
+@bp1.route('/bp1')
+def route_bp1():
+	# 访问/bp1时
+	return 'bp1'
+
+@bp2.route('/bp2')
+def route_bp2():
+	# 访问/api/bp2时
+	return 'bp2'
+
+if __name__ == '__main__':
+	# 将蓝图与app绑定
+	app.register_blueprint(bp1)
+	app.register_blueprint(bp2,url_prefix='/api')
+
+	# 输出蓝图管理的路由
+	print("App应用所拥有的路由框架 ： \n",app.url_map)
+
+	app.run(debug=True)
+
+```
+
+
+
+### 解析
+
+使用了两个蓝图：`bp1`和`bp2`
+
+其中，`bp2`使用了前缀url `/api`
+
+对于bp1，它管理的路由为 `http://127.0.0.1:5000/bp1`
+
+对于bp2，它管理的路由为 `http://127.0.0.1:5000/api/bp2`，即便.route('/bp2')没有前缀，但是在bp2与app链接时，提供了一个前缀url `/api`
+
+
+
+### 运行
+
+输出app连接的所有蓝图，以及蓝图管理的所有路由
+
+![image-20240520193328007](assets/image-20240520193328007.png)
