@@ -68,7 +68,10 @@ Flask-Web
     https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
     ```
 
-    * 安装勾选时建议三个全部勾选
+    * 安装勾选时建议所有带着 **Recommend** 的都勾选
+
+       ![image-20240520122438976](assets/image-20240520122438976.png)
+
     * **务必记得安装路径**
 
     
@@ -77,17 +80,17 @@ Flask-Web
 
     * 按下Windows键，在搜索框内搜索 **编辑系统环境变量**，选择 **环境变量(N)...**
 
-        <img src="README.assets/image-20240515144616447.png" alt="image-20240515144616447" style="zoom:50%;" />
+        <img src="assets/image-20240515144616447.png" alt="image-20240515144616447" style="zoom:50%;" />
 
-        <img src="README.assets/image-20240515145018687.png" alt="image-20240515145018687" style="zoom: 80%;" />
+        <img src="assets/image-20240515145018687.png" alt="image-20240515145018687" style="zoom: 80%;" />
 
     * 找到 **系统变量(S)** 中的 `Path`，并双击进入
 
-        <img src="README.assets/image-20240515145055234.png" alt="image-20240515145055234" style="zoom:67%;" />
+        <img src="assets/image-20240515145055234.png" alt="image-20240515145055234" style="zoom:67%;" />
 
     * 点击 **新建(N)**，添加两条环境变量:
 
-        <img src="README.assets/image-20240515145111500.png" alt="image-20240515145111500" style="zoom:67%;" />
+        <img src="assets/image-20240515145111500.png" alt="image-20240515145111500" style="zoom:67%;" />
 
         ```bash
         PATH\condabin
@@ -145,7 +148,7 @@ Flask-Web
         
         * 选择 **Plugins > Marketplace**
         
-            <img src="README.assets/image-20240515153109264.png" alt="image-20240515153109264" style="zoom:50%;" />
+            <img src="assets/image-20240515153109264.png" alt="image-20240515153109264" style="zoom:50%;" />
         
             * 好用的插件有 : `Chinese`，`Github Theme`，`Rainbow Brackets`，`VSCode Keymap`，`CodeGlance Pro`
         
@@ -157,19 +160,19 @@ Flask-Web
         
         * 点击 **项目:[你的项目名]** >  **Python解释器** >  **添加解释器**  >  **添加本地解释器**
         
-            <img src="README.assets/image-20240515142817461.png" alt="image-20240515142817461" style="zoom:80%;" />
+            <img src="assets/image-20240515142817461.png" alt="image-20240515142817461" style="zoom:80%;" />
         
         * 左边选择 **Conda环境**，可执行文件选择`[Path_To_Miniconda]\Scripts\conda.exe`
         
-            <img src="README.assets/image-20240515143211684.png" alt="image-20240515143211684" style="zoom: 50%;" />
+            <img src="assets/image-20240515143211684.png" alt="image-20240515143211684" style="zoom: 50%;" />
         
-            <img src="README.assets/image-20240515143734908.png" alt="image-20240515143734908" style="zoom:50%;" />
+            <img src="assets/image-20240515143734908.png" alt="image-20240515143734908" style="zoom:50%;" />
         
-            <img src="README.assets/image-20240515143820890.png" alt="image-20240515143820890" style="zoom: 50%;" />
+            <img src="assets/image-20240515143820890.png" alt="image-20240515143820890" style="zoom: 50%;" />
         
         * 选择 **使用现有环境** ，在下拉框中选择 `flask-web`，点击确认
         
-            <img src="README.assets/image-20240515144222714.png" alt="image-20240515144222714" style="zoom: 50%;" />
+            <img src="assets/image-20240515144222714.png" alt="image-20240515144222714" style="zoom: 50%;" />
         
             
 
@@ -195,7 +198,7 @@ Flask-Web
 
 2. 选择PyCharm上方的 **当前文件 > 编辑配置**
 
-  <img src="README.assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
+  <img src="assets/image-20240515145549662.png" alt="image-20240515145549662" style="zoom:80%;" />
 
 3. 点击 **+号**，并选择 **Flask服务器**，推荐跳转至[Python运行配置](./Docs/QA.md#2.在app.run()传入参数后没有生效)使用Python配置方式
 
@@ -204,16 +207,15 @@ Flask-Web
         * **[推荐]** Python配置 **Debug(虫子标志)** 会报错，但 **Run(三角形标志)** 能够正常运行，且在向`app.run()`传入参数时能够正常识别，传入参数知识点详细看[Demo_1](.\Docs\Demo解析.md#Demo_1)。Python配置方式详细看[Python运行配置](./Docs/QA.md#2.在app.run()传入参数后没有生效)
         * Flask服务器配置在**Debug(虫子标志)**和**Run(三角形标志)** 都能够正常运行，但无法向`app.run()`传入参数，会无法识别
 
-
-<img src="README.assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
+<img src="assets/image-20240515150021871.png" alt="image-20240515150021871" style="zoom:50%;" />
 
 4. 填写相应信息
 
-    <img src="README.assets/image-20240515150700126.png" alt="image-20240515150700126" style="zoom:50%;" />
+    <img src="assets/image-20240515150700126.png" alt="image-20240515150700126" style="zoom:50%;" />
 
 5. Debug，并打开网址:http://127.0.0.1:5000 ，显示`Hello World`
 
-    <img src="README.assets/image-20240515150820288.png" alt="image-20240515150820288" style="zoom: 80%;" />
+    <img src="assets/image-20240515150820288.png" alt="image-20240515150820288" style="zoom: 80%;" />
 
 ​       
 
