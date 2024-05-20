@@ -40,7 +40,11 @@ Flask-Web
 
 ————Demo_5 **更好的ORM模型映射表的方法**
 
+————Flask-Server **使用Flask框架写的各种组件**
 
+————————AdminLogin **管理员登陆操作组件**
+
+</br>
 
 ——Docs **文档**
 
@@ -53,6 +57,12 @@ Flask-Web
 
 
 
+
+## 学习流程
+
+从Demo1学到Demo6可以理解Flask、SQLAlchemy框架的基本运作方式
+
+AdminLogin可以学到 **登陆系统** 和 **管理员管理数据库** 等操作
 
 
 
@@ -173,7 +183,6 @@ Flask-Web
       xz                        5.4.6                h8cc25b3_1    defaults
       zlib                      1.2.13               h8cc25b3_1    defaults
     ````
-    
    
 5. 编译器配置
 

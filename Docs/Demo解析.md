@@ -1155,6 +1155,25 @@ app.register_blueprint(bp, url_prefix='/api') # 前缀url /api，表示任何路
 
 
 
+## url_for
+
+在使用蓝图管理URL路由后，若需要用到`url_for`，**模块和HTML**  需要前面加上蓝图的名字
+
+```python
+# 原来的url_for
+<form method="post" action="{{ url_for('login') }}">
+
+url_for('home')
+
+
+# 使用蓝图的url_for
+<form method="post" action="{{ url_for('user.login') }}">
+
+url_for('user.home')
+```
+
+
+
 ## 示例
 
 ### 代码
