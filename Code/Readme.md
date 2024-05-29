@@ -8,6 +8,8 @@ Flask文档：[流萤小姐教你如何学习Flask](https://dormousehole.readthe
 
 Flask-SQLAlchemy文档：[萨姆大哥教你如何点燃数据库](https://wizardforcel.gitbooks.io/flask-extension-docs/content/flask-sqlalchemy.html)
 
+Flask与Jinja2协同：[Jinja2中文文档](https://docs.pythontab.com/jinja/jinja2/)
+
 
 
 ## 环境配置

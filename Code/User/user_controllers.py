@@ -10,5 +10,5 @@ def user_login():
 		username = user_request.get('username')
 		password = user_request.get('password')
 
-		# TEST
-		return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', 1)
+	# TEST
+	return Response.response(ResponseCode.BAD_REQUEST, 'TEST', None)
