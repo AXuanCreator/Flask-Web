@@ -2,18 +2,19 @@
 # 用于管理返回给前端的JSON格式                                                                                                                                                                   流萤小姐与你同在
 ############################### VERSION 1.0 ###############################
 from flask import jsonify
-from enum import Enum
+
 
 class Response:
-	def response(self, code, msg, result):
+	@staticmethod
+	def response(code, msg, result):
 		return jsonify({
 			'code': code,
-			'msg': msg,
+			'message': msg,
 			'result': result
 		})
 
 
-class ResponseCode(Enum):
+class ResponseCode:
 	BAD_REQUEST = 400
 	USERNAME_REPEATED = 401
 
@@ -32,7 +33,3 @@ class ResponseCode(Enum):
 	LOGIN_SUCCESS = 700
 	ACCOUNT_NOT_EXIST = 701
 	WRONG_PASSWORD = 702
-
-
-
-

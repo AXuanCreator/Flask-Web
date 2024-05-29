@@ -94,8 +94,8 @@ user = 'firefly'
 * ~~令人感叹的Google JAVA竟然使用两个空格的缩进~~
 
 ```python
-######
-	# TAB
+123456
+	| TAB
 ```
 
 
@@ -194,12 +194,33 @@ def login():
 
 ```python
 response = jsonify({
-    "code": ResponseCode.ACCOUNT_NOT_EXIST,
-    "message": "Wrong Username",
-    "data": None
+    'code' ResponseCode.ACCOUNT_NOT_EXIST,
+    'message': '1111",
+    'result': '10086' 
 })
 
 return response
+```
+
+使用类管理
+
+```python
+class Response:
+    @staticmethod
+    def response(code, msg, result):
+        return jsonify({
+            'code': code,
+            'message': msg,
+            'result': result
+        })
+        
+
+class ResponseCode:
+	BAD_REQUEST = 400
+	USERNAME_REPEATED = 401
+.....................
+
+return Response.response(ResponseCode.BAD_REQUEST,"Fireflyisbeautiful","SAM")
 ```
 
 
@@ -218,24 +239,6 @@ def user_register():
     
     if request.method == 'DELETE':
         print('你过关！')
-```
-
-使用类管理
-
-```python
-class Response:
-    @staticmethod
-    def response(self, code, msg, result):
-        return jsonify({
-            'code': code,
-            'msg': msg,
-            'result': result
-        })
-        
-        
-.....................
-
-return Response.response(10086,"Fireflyisbeautiful","SAM")
 ```
 
 
@@ -267,19 +270,70 @@ def login():
 
 
 
-### Services层使用 `@staticmethod`
+### Services层使用 @staticmethod
 
 ```python
 class UserService:
     @staticmethod
     def get_all_user():
-        return User.query.all
+        return User.query.all()
     
 # 调用
 UserService.get_all_user()
 ```
 
 
+
+### 从ORM模型中对数据库进行操作
+
+```python
+# ORM模型
+db = SQLAlchemy()
+
+class User(db.Model):
+	__tablename__ = 'tb_user'
+	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+	username = db.Column(db.String(80), unique=True, nullable=True)
+	password = db.Column(db.String(80), nullable=True)
+	name = db.Column(db.String(20), nullable=True)
+	gender = db.Column(db.String(20), nullable=True)
+	phone = db.Column(db.String(80), unique=True, nullable=True)
+	mail = db.Column(db.String(80), unique=True, nullable=True)
+	max_borrow_days = db.Column(db.BigInteger, default=-1)  # 若为-1，则说明Service出现问题
+	max_borrow_books = db.Column(db.BigInteger, default=-1)
+	creation_date = db.Column(db.DateTime, server_default=db.func.now())  # server_default有更高优先级
+
+
+## SELECT ##
+# 获取所有信息
+User.query.all()
+
+# 通过id获取信息
+User.query.get(id)
+
+# 通过指定字段获取信息
+# 假如username并非unique并且有多人昵称为Firefly，就需要通过迭代、first()、second()等方法获取ORM对象
+User.query.filter_by(username='Firefly')	
+
+
+## INSERT ##
+new_user = User(username='Firefly', password='password', ...)
+db.session.add(new_user)	# 暂存 == git add .
+db.session.commit()		# 提交 == git commit 
+
+## UPDATE ##
+update_user = User.query.get(id)	# 实际上应当把 User.query.get(id) 封装在user_service里
+if update_user:
+    update_user.name = '我不是流萤'
+    update_user.phone = '111111'
+    db.session.commit()		# 不需要提交到暂存区，直接commit即可。因为update操作是在暂存区中完成
+
+## DELETE ##
+delete_user = User.query.filter_by(username='流萤')	# username应当是unique
+if delete_user:
+    db.session.delete(delete_user)	# 从暂存区中移除
+	db.session.commit()	# 提交
+```
 
 
 
@@ -375,7 +429,7 @@ Admin密码修改
 
 
 
+## 注意事项
 
-
-
+需要将Flask-Web/Code文件夹设置为 **源代码根目录**，一切相对路径都是相对于Code文件夹。否则将会出现导入包路径错误但依旧能正常运行
 

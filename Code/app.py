@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from Config import db, AppConfig
-
+from Admin import admin_bp
+from Book import book_bp
+from User import user_bp
 
 def create_app():
 	# 创建Flask应用实例，对所有域名开放
@@ -13,7 +15,9 @@ def create_app():
 	app.config.from_object(AppConfig)
 
 	# 加载蓝图
-
+	app.register_blueprint(user_bp, url_prefix='/user')
+	app.register_blueprint(book_bp, url_prefix='/book')
+	app.register_blueprint(admin_bp, url_prefix='/admin')
 
 	# 初始化数据库
 	db.init_app(app)

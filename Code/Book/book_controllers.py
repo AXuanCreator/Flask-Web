@@ -1,2 +1,5 @@
-#!/user/bin/env python3
-# -*- coding: utf-8 -*-
+from flask import Flask, Blueprint
+
+book_bp = Blueprint('book', __name__)
+
+# @book_bp.route('/example', methods=['GET'])
