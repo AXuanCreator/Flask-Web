@@ -40,6 +40,8 @@ Flask-Web
 
 ————Demo_5 **更好的ORM模型映射表的方法**
 
+————Demo_6 **使用蓝图管理URL**
+
 ————Flask-Server **使用Flask框架写的各种组件**
 
 ————————AdminLogin **管理员登陆操作组件**
@@ -62,7 +64,7 @@ Flask-Web
 
 从Demo1学到Demo6可以理解Flask、SQLAlchemy框架的基本运作方式
 
-AdminLogin可以学到 **登陆系统** 和 **管理员管理数据库** 等操作
+AdminLogin可以学到 **登陆系统** 和 **管理员管理数据库** 等操作，使用清晰的项目文件结构
 
 
 
@@ -138,7 +140,7 @@ AdminLogin可以学到 **登陆系统** 和 **管理员管理数据库** 等操�
     
     conda activate flask-web
     
-    conda install flask pymysql flask-sqlalchemy -y 
+    conda install flask pymysql flask-sqlalchemy flask_cors -y 
     
     pip install flask-migrate
     ```

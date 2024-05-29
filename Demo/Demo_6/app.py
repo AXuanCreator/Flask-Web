@@ -28,3 +28,15 @@ if __name__ == '__main__':
 	print("App应用所拥有的路由框架 ： \n",app.url_map)
 
 	app.run(debug=True)
+
+def my_func_a():
+	"""这是一个函数"""
+	pass
+
+def my_func_b(x):
+	"""
+	这是一个带参数的函数
+	:param x: 我不知道
+	:return: 我也不知道
+	"""
+	pass

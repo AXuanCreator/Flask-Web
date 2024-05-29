@@ -7,12 +7,17 @@
 ################################################################################
 
 from flask import Flask
+from flask_cors import CORS
+
 from models import db
 from config import Config
+
 from user_controllers import user_bp
 def create_app():
 	# 创建Flask应用实例
 	app = Flask(__name__)
+	CORS(app)
+
 	app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
 	app.config['SECRET_KEY'] = Config.SECRET_KEY

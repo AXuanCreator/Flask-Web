@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, session, flash, redirect, url_for
+from flask import Blueprint, request, render_template, session, flash, redirect, url_for, jsonify
 from services import UserService, Utils
 
 # 初始化蓝图对象
