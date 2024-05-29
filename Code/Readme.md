@@ -359,71 +359,72 @@ D:.
 
 ### User
 
-User登陆
+* User登陆
 
-User注册
+* User注册
 
-User个人信息修改
+* User个人信息修改
 
-User密码修改
+* User密码修改
 
-User注销
+* User注销
 
 
 
 ### Book
 
-Book查询
+* Book查询
 
-Book修改
+* Book修改
 
-Book增加
+* Book增加
 
-Book删除
+* Book删除
 
-Book分页
-
-
-
-#### Category
-
-增加图书类别
-
-删除图书类别
-
-获取图书类别
+* Book分页
 
 
 
-#### Recommend
+#### —— Category
 
-书籍推荐
+* 增加图书类别
+
+* 删除图书类别
+
+* 获取图书类别
 
 
 
-#### Borrow
+#### —— Recommend
 
-Book借阅
+* 书籍推荐
+    * 设计两套：普通的根据分类、阅读量进行推荐 | 使用协同过滤算法
 
-Book历史借阅
 
-Book归还
 
-Book续借
+#### —— Borrow
 
-Book查询归还状态
+* Book借阅
+
+* Book历史借阅
+
+* Book归还
+
+* Book续借
+
+* Book查询归还状态
 
 
 
 ### Admin
 
-Admin登陆
+* Admin登陆
 
-Admin查询
+* Admin查询
 
-Admin个人信息修改
+* Admin个人信息修改
 
-Admin密码修改
+* Admin密码修改
 
 
 
