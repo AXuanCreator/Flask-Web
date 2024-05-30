@@ -12,3 +12,4 @@ def user_login():
 
 	# TEST
 	return Response.response(ResponseCode.BAD_REQUEST, 'TEST', None)
+
