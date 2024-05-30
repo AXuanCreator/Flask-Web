@@ -11,9 +11,9 @@ PORT = '3306'
 # MySQL的用户名，在安装MySQL时由用户创建
 USERNAME = 'root'
 # MySQL的密码，在安装MySQL时由用户创建
-PASSWORD = '9966330'
+PASSWORD = '150181'
 # MySQL的数据库名
-DATABASE = 'flask-web'
+DATABASE = 'demo'
 
 # 创建app应用
 app = Flask(__name__)
