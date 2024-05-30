@@ -17,6 +17,15 @@ class AppConfig():
 	# FLASK
 	DEBUG = True
 
+	# MAIL
+	MAIL_SERVER = 'smtp.sinpor.top'
+	MAIL_PORT = 587
+	MAIL_USE_TLS = True  # STARTTLS
+	MAIL_USE_SSL = False  # SSL
+	MAIL_USERNAME = 'eigb903@sinpor.top'
+	MAIL_PASSWORD = 'sinpor123'
+	MAIL_DEFAULT_SENDER = ('Your Code', 'eigb903@sinpor.top')
+
 
 class DbConfig:
 	pass

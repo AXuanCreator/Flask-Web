@@ -10,7 +10,7 @@ class UserDao:
 	#
 	# @staticmethod
 	# def get_user_id(id):
-	# 	return User.query.get(id)
+	# 	db_user = User.query.get(id)
 	#
 	# @staticmethod
 	# def get_user_username(username):
@@ -28,8 +28,8 @@ class UserDao:
 			return ReturnCode.USER_NOT_EXIST
 
 		# 使用列表推导式赋值
-		request_keys = ['username', 'name', 'gender', 'phone', 'mail']
-		username, name, gender, phone, mail = (user_request.get(key) for key in request_keys)
+		request_keys = ['username', 'name', 'password', 'gender', 'phone', 'mail']
+		username, password, name, gender, phone, mail = (user_request.get(key) for key in request_keys)
 
 		# 检测
 		if username is not None and not RuleCheck.check_username_in_rules(username):
@@ -48,8 +48,27 @@ class UserDao:
 		db_user.gender = gender if gender is not None else db_user.gender
 		db_user.phone = phone if phone is not None else db_user.phone
 		db_user.mail = mail if mail is not None else db_user.mail
-
 		db.session.commit()
+
+		return ReturnCode.SUCCESS
+
+	@staticmethod
+	def update_user_password(id, password):
+		db_user = User.query.get(id)
+		if db_user is None:
+			return ReturnCode.USER_NOT_EXIST
+
+		if password is None:
+			return ReturnCode.FAIL
+
+		if not RuleCheck.check_password_in_rules(password):
+			return ReturnCode.PASSWORD_NOT_ALLOWED
+
+		db_user.password = password
+		db.session.commit()
+
+		return ReturnCode.SUCCESS
+
 
 	## DELETE ##
 	@staticmethod
@@ -60,6 +79,8 @@ class UserDao:
 
 		db.session.delete(delete_user)
 		db.session.commit()
+
+		return ReturnCode.SUCCESS
 
 	## INSERT ##
 	@staticmethod
@@ -108,3 +129,15 @@ class UserServices:
 	@staticmethod
 	def register(user_request):
 		return UserDao.insert_user(user_request)
+
+	@staticmethod
+	def deregister(id):
+		return UserDao.delete_user_id(id)
+
+	@staticmethod
+	def change_password(id, user_request):
+		return UserDao.update_user_id(id, user_request)
+
+	@staticmethod
+	def update_user(id, user_request):
+		return UserDao.update_user_id(id, user_request)
