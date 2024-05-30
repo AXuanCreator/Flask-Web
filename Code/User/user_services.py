@@ -1,6 +1,6 @@
 from flask import Flask
 from Config import User, ReturnCode, RuleCheck, db, UserConfig
-
+from User.Mail import SendMail
 
 class UserDao:
 	# ## SELECT是不必要的 ##
@@ -141,3 +141,8 @@ class UserServices:
 	@staticmethod
 	def update_user(id, user_request):
 		return UserDao.update_user_id(id, user_request)
+
+	@staticmethod
+	def send_mail(mail):
+		SendMail.generate_random_code(mail)
+		return SendMail.send_mail(mail)

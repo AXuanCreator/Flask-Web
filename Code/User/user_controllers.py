@@ -3,6 +3,7 @@ from flask import Flask, Blueprint, request
 from Config import ReturnCode, User
 from Utils import Response, ResponseCode
 from .user_services import UserServices
+from .Mail import SendMail
 
 user_bp = Blueprint('user', __name__)
 
@@ -67,7 +68,13 @@ def user_deregister(id):
 @user_bp.route('/send-code', methods=['POST'])
 def user_send_code():
 	if request.method == 'POST':
-		pass
+		match UserServices.send_mail(request.get_json().get('mail')):
+			case ReturnCode.SUCCESS:
+				return Response.response(ResponseCode.SUCCESS, 'Send Mail Success', None)
+			case ReturnCode.FAIL:
+				return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+
+
 
 
 @user_bp.route('/<mail>/code', methods=['POST'])
