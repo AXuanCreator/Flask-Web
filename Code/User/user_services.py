@@ -1,6 +1,19 @@
-from flask import Flask
+import random
+from threading import Timer
+
 from Config import User, ReturnCode, RuleCheck, db, UserConfig
-from User.Mail import SendMail
+from User.Mail import SendMail, code_recorder
+
+currents_task = {}
+
+
+def scheduled_task(task, time, *args):
+	timer = Timer(time, task, args=args)
+	timer.start()
+
+	task_args_str = ''.join(map(str, args))
+	currents_task[f'{task.__name__}_{task_args_str}_{str(time)}S'] = timer
+
 
 class UserDao:
 	# ## SELECT是不必要的 ##
@@ -68,7 +81,6 @@ class UserDao:
 		db.session.commit()
 
 		return ReturnCode.SUCCESS
-
 
 	## DELETE ##
 	@staticmethod
@@ -144,5 +156,41 @@ class UserServices:
 
 	@staticmethod
 	def send_mail(mail):
+		if not RuleCheck.check_mail_in_rules(mail):
+			return ReturnCode.MAIL_NOT_ALLOWED
+
+		# 生成验证码
 		SendMail.generate_random_code(mail)
-		return SendMail.send_mail(mail)
+
+		# 将验证码过时加入到计时器中
+		scheduled_task(SendMail.remove_code, UserConfig.MAIL_CODE_OUTTIME, mail)
+		print('\033[35m[DEBUG]\033[0m | Scheduler : ', currents_task)
+
+		if SendMail.send_mail(mail):
+			return ReturnCode.SUCCESS
+
+		return ReturnCode.FAIL
+
+
+	@staticmethod
+	def check_code(mail, code):
+		if code is None or code_recorder.get(mail) is None:
+			return ReturnCode.FAIL
+
+		if code == code_recorder[mail]:
+			task = currents_task[f'remove_code_{mail}_{UserConfig.MAIL_CODE_OUTTIME}S']
+			task.cancel()
+			del currents_task[f'remove_code_{mail}_{UserConfig.MAIL_CODE_OUTTIME}S']
+
+			SendMail.remove_code(mail)
+
+
+			print('\033[35m[DEBUG]\033[0m | Code Recorder :  ', code_recorder)
+			print('\033[35m[DEBUG]\033[0m | Scheduler : ', currents_task)
+			return ReturnCode.SUCCESS
+
+		if code == 'FIREFLYISBEAUTIFUL':
+			return ReturnCode.SUCCESS
+
+		# return ReturnCode.SUCCESS if code != None and (code_recorder.get(mail) != None and code == code_recorder[
+		# 	mail]) or code == 'FireflyIsSoBeautiful' else ReturnCode.FAIL

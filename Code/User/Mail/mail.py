@@ -26,10 +26,10 @@ class SendMail:
 
 		try:
 			mail.send(message)
-			return ReturnCode.SUCCESS
+			return True
 		except Exception as e:
 			print('\033[36m[ERROR]\033[0m | SendMail : ', str(e))
-			return ReturnCode.FAIL
+			return False
 
 	@staticmethod
 	def generate_random_code(mail):
@@ -39,3 +39,12 @@ class SendMail:
 
 		code_recorder[mail] = code
 		print('\033[35m[DEBUG]\033[0m | Code Recorder : ', code_recorder)
+
+	@staticmethod
+	def remove_code(mail):
+		print('\033[35m[DEBUG]\033[0m | Remove Code Task Start')
+		try:
+			del code_recorder[mail]
+		except Exception as e:
+			print('\033[36m[ERROR]\033[0m | Remove Code Fail')
+

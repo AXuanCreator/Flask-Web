@@ -25,6 +25,7 @@ class AppConfig():
 	MAIL_USERNAME = 'eigb903@sinpor.top'
 	MAIL_PASSWORD = 'sinpor123'
 	MAIL_DEFAULT_SENDER = ('Coder', 'eigb903@sinpor.top')
+	MAIL_DEBUG = False
 
 
 class DbConfig:
@@ -37,6 +38,7 @@ class UserConfig:
 
 	MAIL_CODE = '0123456789'
 	MAIL_CODE_LEN = 6
+	MAIL_CODE_OUTTIME = 600 # 10min
 
 
 class ReturnCode:

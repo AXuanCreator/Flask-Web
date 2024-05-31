@@ -1,7 +1,8 @@
 from flask import Flask, Blueprint, request
 
+
 from Config import ReturnCode, User
-from Utils import Response, ResponseCode
+from Utils import Response, ResponseCode, Helper
 from .user_services import UserServices
 from .Mail import SendMail
 
@@ -67,20 +68,28 @@ def user_deregister(id):
 
 @user_bp.route('/send-code', methods=['POST'])
 def user_send_code():
-	if request.method == 'POST':
-		match UserServices.send_mail(request.get_json().get('mail')):
-			case ReturnCode.SUCCESS:
-				return Response.response(ResponseCode.SUCCESS, 'Send Mail Success', None)
-			case ReturnCode.FAIL:
-				return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+	assert request.method == 'POST'
 
+	mail = request.get_json().get('mail')
+	match UserServices.send_mail(mail):
+		case ReturnCode.SUCCESS:
+			return Response.response(ResponseCode.SUCCESS, 'Send Mail Success', mail)
+		case ReturnCode.FAIL:
+			return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+		case ReturnCode.MAIL_NOT_ALLOWED:
+			return Response.response(ResponseCode.FAILED, 'Enter True Mail', None)
 
 
 
 @user_bp.route('/<mail>/code', methods=['POST'])
 def user_verify_code(mail):
-	if request.method == 'POST':
-		pass
+	assert request.method == 'POST'
+
+	match UserServices.check_code(mail, request.get_json().get('code')):
+		case ReturnCode.SUCCESS:
+			return Response.response(ResponseCode.SUCCESS, 'Check Code Success', User.query.filter_by(mail=mail).first().id)
+		case ReturnCode.FAIL:
+			return Response.response(ResponseCode.FAILED, 'Check Code Fail', None)
 
 
 @user_bp.route('/<id>/password', methods=['PUT'])
@@ -101,16 +110,16 @@ def user_change_password(id):
 
 @user_bp.route('/<id>', methods=['GET', 'PUT'])
 def user_info(id):
-	if request == 'GET':
-		db_user = User.query.get(id)
+	if request.method == 'GET':
+		db_user = User.query.get(int(id))
 		if db_user is None:
 			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
-		return Response.response(ResponseCode.SUCCESS, 'Get Info Success', db_user)
+		return Response.response(ResponseCode.SUCCESS, 'Get Info Success', Helper.to_dict(db_user))
 
-	elif request == 'PUT':
+	elif request.method == 'PUT':
 		user_request = request.get_json()
-		match UserServices.update_user(id, user_request):
+		match UserServices.update_user(int(id), user_request):
 			case ReturnCode.SUCCESS:
 				return Response.response(ResponseCode.SUCCESS, 'Update Info Success', id)
 			case ReturnCode.USER_NOT_EXIST:
