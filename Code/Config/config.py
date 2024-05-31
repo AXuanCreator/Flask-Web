@@ -7,7 +7,7 @@ class AppConfig():
 	HOSTNAME = '127.0.0.1'
 	PORT = '3306'
 	USERNAME = 'root'
-	PASSWORD = '9966330'
+	PASSWORD = 'huang33280234'
 	DATABASE = 'flask-web'  # 架构名
 
 	SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
