@@ -17,6 +17,16 @@ class AppConfig():
 	# FLASK
 	DEBUG = True
 
+	# MAIL
+	MAIL_SERVER = 'smtp.sinpor.top'
+	MAIL_PORT = 465
+	MAIL_USE_TLS = False  # STARTTLS
+	MAIL_USE_SSL = True  # SSL
+	MAIL_USERNAME = 'eigb903@sinpor.top'
+	MAIL_PASSWORD = 'sinpor123'
+	MAIL_DEFAULT_SENDER = ('Coder', 'eigb903@sinpor.top')
+	MAIL_DEBUG = False
+
 
 class DbConfig:
 	pass
@@ -25,6 +35,10 @@ class DbConfig:
 class UserConfig:
 	MAX_BORROW_BOOKS = 30
 	MAX_BORROW_DAYS = 30
+
+	MAIL_CODE = '0123456789'
+	MAIL_CODE_LEN = 6
+	MAIL_CODE_OUTTIME = 600 # 10min
 
 
 class ReturnCode:

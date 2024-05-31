@@ -1,8 +1,10 @@
 from flask import Flask, Blueprint, request
 
+
 from Config import ReturnCode, User
-from Utils import Response, ResponseCode
+from Utils import Response, ResponseCode, Helper
 from .user_services import UserServices
+from .Mail import SendMail
 
 user_bp = Blueprint('user', __name__)
 
@@ -37,15 +39,15 @@ def user_register():
 			return Response.response(ResponseCode.SUCCESS, 'Register Success', User.query.filter_by(
 				username=user_request.get('username')).first().id)
 		case ReturnCode.USERNAME_NOT_ALLOWED:
-			return Response.response(ResponseCode.USERNAME_NOT_ALLOW, 'Username Format Wrong', None)
+			return Response.response(ResponseCode.BAD_REQUEST, 'Username Format Wrong', None)
 		case ReturnCode.USERNAME_REPEATED:
 			return Response.response(ResponseCode.USERNAME_REPEATED, 'Username Has Been Registered', None)
 		case ReturnCode.PASSWORD_NOT_ALLOWED:
 			return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
 		case ReturnCode.MAIL_NOT_ALLOWED:
-			return Response.response(ResponseCode.MAIL_NOT_ALLOW, 'Mail Format Wrong', None)
+			return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
 		case ReturnCode.MAIL_REPEATED:
-			return Response.response(ResponseCode.MAIL_REPEATED, 'Mail Has Been Registered', None)
+			return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
 		case ReturnCode.INFO_NOT_ALLOWED:
 			return Response.response(ResponseCode.BAD_REQUEST, 'Enter All Information', None)
 		case _:
@@ -54,31 +56,82 @@ def user_register():
 
 @user_bp.route('/<id>/deregister', methods=['DELETE'])
 def user_deregister(id):
-	if request.method == 'DELETE':
-		pass
+	assert request.method == 'DELETE'
+
+	match UserServices.deregister(id):
+		case ReturnCode.SUCCESS:
+			return Response.response(ResponseCode.SUCCESS, 'Deregister Success', id)
+		case ReturnCode.USER_NOT_EXIST:
+			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+
 
 
 @user_bp.route('/send-code', methods=['POST'])
 def user_send_code():
-	if request.method == 'POST':
-		pass
+	assert request.method == 'POST'
+
+	mail = request.get_json().get('mail')
+	match UserServices.send_mail(mail):
+		case ReturnCode.SUCCESS:
+			return Response.response(ResponseCode.SUCCESS, 'Send Mail Success', mail)
+		case ReturnCode.FAIL:
+			return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+		case ReturnCode.MAIL_NOT_ALLOWED:
+			return Response.response(ResponseCode.FAILED, 'Enter True Mail', None)
+
 
 
 @user_bp.route('/<mail>/code', methods=['POST'])
 def user_verify_code(mail):
-	if request.method == 'POST':
-		pass
+	assert request.method == 'POST'
+
+	match UserServices.check_code(mail, request.get_json().get('code')):
+		case ReturnCode.SUCCESS:
+			return Response.response(ResponseCode.SUCCESS, 'Check Code Success', User.query.filter_by(mail=mail).first().id)
+		case ReturnCode.FAIL:
+			return Response.response(ResponseCode.FAILED, 'Check Code Fail', None)
 
 
 @user_bp.route('/<id>/password', methods=['PUT'])
 def user_change_password(id):
-	if request.method == 'PUT':
-		pass
+	assert request.method == 'PUT'
+
+	user_request = request.get_json()
+	match UserServices.change_password(id, user_request):
+		case ReturnCode.SUCCESS:
+			return Response.response(ResponseCode.SUCCESS, 'Update Password Success', id)
+		case ReturnCode.USER_NOT_EXIST:
+			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+		case ReturnCode.FAIL:
+			return Response.response(ResponseCode.BAD_REQUEST, 'Password Null', None)
+		case ReturnCode.PASSWORD_NOT_ALLOWED:
+			return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
 
 
 @user_bp.route('/<id>', methods=['GET', 'PUT'])
 def user_info(id):
-	if request == 'GET':
-		pass
-	elif request == 'PUT':
-		pass
+	if request.method == 'GET':
+		db_user = User.query.get(int(id))
+		if db_user is None:
+			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+
+		return Response.response(ResponseCode.SUCCESS, 'Get Info Success', Helper.to_dict(db_user))
+
+	elif request.method == 'PUT':
+		user_request = request.get_json()
+		match UserServices.update_user(int(id), user_request):
+			case ReturnCode.SUCCESS:
+				return Response.response(ResponseCode.SUCCESS, 'Update Info Success', id)
+			case ReturnCode.USER_NOT_EXIST:
+				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+			case ReturnCode.USERNAME_NOT_ALLOWED:
+				return Response.response(ResponseCode.BAD_REQUEST, 'Username Format Wrong', None)
+			case ReturnCode.USERNAME_REPEATED:
+				return Response.response(ResponseCode.USERNAME_REPEATED, 'Username Has Been Registered', None)
+			case ReturnCode.GENDER_NOT_ALLOWED:
+				return Response.response(ResponseCode.BAD_REQUEST, 'Enter True Gender', None)
+			case ReturnCode.MAIL_NOT_ALLOWED:
+				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
+			case ReturnCode.MAIL_REPEATED:
+				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
+

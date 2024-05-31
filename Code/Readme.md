@@ -21,9 +21,9 @@ conda create -n flask-web python=3.10 -y
 
 conda activate flask-web
 
-conda install flask pymysql flask-sqlalchemy flask_cors -y 
+conda install flask pymysql flask-sqlalchemy flask_cors  -y 
 
-pip install flask-migrate
+pip install flask-migrate flask_caching
 ```
 
 
