@@ -111,7 +111,7 @@ def user_change_password(id):
 @user_bp.route('/<id>', methods=['GET', 'PUT'])
 def user_info(id):
 	if request.method == 'GET':
-		db_user = User.query.get(int(id))
+		db_user = User.query.get(id)
 		if db_user is None:
 			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
@@ -119,7 +119,7 @@ def user_info(id):
 
 	elif request.method == 'PUT':
 		user_request = request.get_json()
-		match UserServices.update_user(int(id), user_request):
+		match UserServices.update_user(id, user_request):
 			case ReturnCode.SUCCESS:
 				return Response.response(ResponseCode.SUCCESS, 'Update Info Success', id)
 			case ReturnCode.USER_NOT_EXIST:
