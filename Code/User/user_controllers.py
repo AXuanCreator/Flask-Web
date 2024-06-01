@@ -1,13 +1,22 @@
-from flask import Flask, Blueprint, request
+from flask import Flask, Blueprint, request, session, redirect, url_for
 
-
-from Config import ReturnCode, User
+from Config import ReturnCode, User, UserConfig
 from Utils import Response, ResponseCode, Helper
 from .user_services import UserServices
 from .Mail import SendMail
 
 user_bp = Blueprint('user', __name__)
 
+@user_bp.before_request
+def user_login_interceptor():
+	if request.path.startswith('/user'):
+		if request.path in UserConfig.ALLOW_PATH:
+			return
+		if request.path.startswith('/user/') and request.path.endswith('/code'):
+			# 验证码
+			return
+		if session.get('user_login') is None:
+			return redirect(url_for('user.user_login'))    # 重新导航到/login视图函数，需要包含蓝图名称
 
 @user_bp.route('/login', methods=['POST'])
 def user_login():
@@ -17,9 +26,16 @@ def user_login():
 	username = user_request.get('username')
 	password = user_request.get('password')
 
+	print('\033[35m[DEBUG]\033[0m | Login | Session : ', session)
+
+	if session.get('user_login'):
+		return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)
+
 	# 仅在Python>=3.10可用match case
 	match UserServices.login(username, password):
 		case ReturnCode.SUCCESS:
+			session['user_login'] = username
+			session.permanent = True  # 启用Config的Session清空时间
 			return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)  # TODO:加入Session
 		case ReturnCode.USER_NOT_EXIST:
 			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
@@ -65,7 +81,6 @@ def user_deregister(id):
 			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
 
-
 @user_bp.route('/send-code', methods=['POST'])
 def user_send_code():
 	assert request.method == 'POST'
@@ -77,8 +92,7 @@ def user_send_code():
 		case ReturnCode.FAIL:
 			return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
 		case ReturnCode.MAIL_NOT_ALLOWED:
-			return Response.response(ResponseCode.FAILED, 'Enter True Mail', None)
-
+			return Response.response(ResponseCode.FAILED, 'Mail Wrong', None)
 
 
 @user_bp.route('/<mail>/code', methods=['POST'])
@@ -87,17 +101,19 @@ def user_verify_code(mail):
 
 	match UserServices.check_code(mail, request.get_json().get('code')):
 		case ReturnCode.SUCCESS:
+			session['user_login'] = User.query.filter_by(mail=mail).first().username
 			return Response.response(ResponseCode.SUCCESS, 'Check Code Success', User.query.filter_by(mail=mail).first().id)
 		case ReturnCode.FAIL:
 			return Response.response(ResponseCode.FAILED, 'Check Code Fail', None)
-
+		case ReturnCode.MAIL_NOT_ALLOWED:
+			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Mail Wrong', None)
 
 @user_bp.route('/<id>/password', methods=['PUT'])
 def user_change_password(id):
 	assert request.method == 'PUT'
 
 	user_request = request.get_json()
-	match UserServices.change_password(id, user_request):
+	match UserServices.change_password(id, user_request.get('password')):
 		case ReturnCode.SUCCESS:
 			return Response.response(ResponseCode.SUCCESS, 'Update Password Success', id)
 		case ReturnCode.USER_NOT_EXIST:
@@ -134,4 +150,3 @@ def user_info(id):
 				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
 			case ReturnCode.MAIL_REPEATED:
 				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
-
