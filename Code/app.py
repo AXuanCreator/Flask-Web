@@ -5,6 +5,7 @@ from Config import db, AppConfig
 from Admin import admin_bp
 from Book import book_bp
 from User import user_bp
+from Borrow import borrow_bp
 from User.Mail import mail
 
 def create_app():
@@ -19,6 +20,7 @@ def create_app():
 	app.register_blueprint(user_bp, url_prefix='/user')
 	app.register_blueprint(book_bp, url_prefix='/book')
 	app.register_blueprint(admin_bp, url_prefix='/admin')
+	app.register_blueprint(borrow_bp, url_prefix='/borrow')
 
 	# 初始化数据库
 	db.init_app(app)
