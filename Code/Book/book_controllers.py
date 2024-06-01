@@ -1,16 +1,15 @@
 from flask import Flask, Blueprint, request
 
 from Config import ReturnCode, Book
-from Utils import Response, ResponseCode
+from Utils import Response, ResponseCode, Helper
 from .book_services import BookServices
 
 book_bp = Blueprint('book', __name__)
 
 
+# 创建书籍
 @book_bp.route('/', methods=['POST'])
 def add_book():
-    assert request.method == 'POST'
-
     book_request = request.get_json()
     title = book_request['title']
     author = book_request['author']
@@ -28,45 +27,42 @@ def add_book():
 
     book = new_book(title, author, category_id, publisher, quantity)
 
-    # TODO 获取id的方法有些不妥
-    # 获取插入前最后一个插入的书籍的ID
+    result = BookServices.insert_book(book)
+
     latest_book = Book.query.order_by(Book.id.desc()).first()
     latest_book_id = latest_book.id
 
-    match BookServices.insert_book(book):
+    match result:
         case ReturnCode.SUCCESS:
-            return Response.response(ResponseCode.SUCCESS, 'Book added successfully', latest_book_id + 1)
+            return Response.response(ResponseCode.SUCCESS, '图书添加成功', latest_book_id)
         case _:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Bad request', None)
+            return Response.response(ResponseCode.BAD_REQUEST, '连接失败', None)
 
 
+# 根据id获取单个书籍
 @book_bp.route('/<id>', methods=['GET'])
-def get_book(id):
+def query_book_id(id):
     book = BookServices.get_book(id)
+
     if book:
-        return Response.response(ResponseCode.SUCCESS, 'Book found', book)
+        return Response.response(ResponseCode.SUCCESS, '书籍查找成功', Helper.to_dict(book))
     else:
-        return Response.response(ResponseCode.NOT_FOUND, 'Book not found', None)
+        return Response.response(ResponseCode.BOOK_NOT_EXIST, '未找到书籍', None)
 
 
-@book_bp.route('/book/<int:id>', methods=['PUT'])
-def update_book(id):
-    book_request = request.get_json()
-    match BookServices.update_book(id, book_request):
-        case ReturnCode.SUCCESS:
-            return Response.response(ResponseCode.SUCCESS, 'Book updated successfully', None)
-        case ReturnCode.BOOK_NOT_FOUND:
-            return Response.response(ResponseCode.NOT_FOUND, 'Book not found', None)
-        case _:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Bad request', None)
+# 修改书籍
+@book_bp.route('/<id>', methods=['PUT'])
+def modify_book(id):
+    BookServices.update_book(id, request.json)
+    result = BookServices.get_book(id)
+    return Response.response(ResponseCode.SUCCESS, '书籍更改成功', Helper.to_dict(result))
 
 
-@book_bp.route('/book/<int:id>', methods=['DELETE'])
+
+@book_bp.route('/<id>', methods=['DELETE'])
 def delete_book(id):
     match BookServices.delete_book(id):
         case ReturnCode.SUCCESS:
-            return Response.response(ResponseCode.SUCCESS, 'Book deleted successfully', None)
-        case ReturnCode.BOOK_NOT_FOUND:
-            return Response.response(ResponseCode.NOT_FOUND, 'Book not found', None)
-        case _:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Bad request', None)
+            return Response.response(ResponseCode.SUCCESS, '书籍删除成功', id)
+        case ReturnCode.BOOK_NOT_EXIST:
+            return Response.response(ResponseCode.BOOK_NOT_EXIST, '未找到书籍', None)

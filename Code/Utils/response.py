@@ -7,6 +7,9 @@ from flask import jsonify
 class Response:
     @staticmethod
     def response(code, msg, result):
+        # 如果 result 是一个类实例，尝试调用其 to_dict 方法
+        if hasattr(result, 'to_dict'):
+            result = result.to_dict()
         return jsonify({
             'code': code,
             'message': msg,

@@ -5,6 +5,8 @@ from Config import db, AppConfig
 from Admin import admin_bp
 from Book import book_bp
 from User import user_bp
+from Book import bookcategory_bp
+
 
 def create_app():
 	# 创建Flask应用实例，对所有域名开放
@@ -17,6 +19,7 @@ def create_app():
 	# 加载蓝图
 	app.register_blueprint(user_bp, url_prefix='/user')
 	app.register_blueprint(book_bp, url_prefix='/book')
+	app.register_blueprint(bookcategory_bp, url_prefix='/book-category')
 	app.register_blueprint(admin_bp, url_prefix='/admin')
 
 	# 初始化数据库

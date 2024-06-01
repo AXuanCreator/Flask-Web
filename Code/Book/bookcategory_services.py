@@ -3,37 +3,43 @@ from Config import BookCategory, ReturnCode, db
 
 class BookCategoryServices:
     @staticmethod
-    def add_book_category(category_request):
-        name = category_request.get('name')
+    def insert_book_category(name_data):
+        name = name_data
         if BookCategory.query.filter_by(name=name).first():
-            return ReturnCode.CATEGORY_ALREADY_EXISTS
+            return ReturnCode.CATEGORY_EXIST
 
-        new_category = BookCategory(**category_request)
-        db.session.add(new_category)
+        new_book_category = BookCategory(name=name_data)
+
+        db.session.add(new_book_category)
         db.session.commit()
         return ReturnCode.SUCCESS
 
+    # 显示全部分类
+    # todo 分页
     @staticmethod
-    def get_book_category(id):
-        return BookCategory.query.get(id)
+    def get_book_categories():
+        return BookCategory.query.all()
 
+    # 根据名字搜索类别
     @staticmethod
-    def update_book_category(id, category_request):
+    def get_book_category_by_name(name):
+        return BookCategory.query.filter_by(name=name).first()
+
+    # 类别信息更新
+    @staticmethod
+    def update_book_category(id, category_name):
         category = BookCategory.query.get(id)
-        if not category:
-            return ReturnCode.CATEGORY_NOT_FOUND
-
-        for key, value in category_request.items():
-            setattr(category, key, value)
+        category.name = category_name
         db.session.commit()
-        return ReturnCode.SUCCESS
 
+        return category
+
+    # 类别删除
     @staticmethod
     def delete_book_category(id):
         category = BookCategory.query.get(id)
-        if not category:
-            return ReturnCode.CATEGORY_NOT_FOUND
-
+        if category is None:
+            return ReturnCode.CATEGORY_NOT_EXIST
         db.session.delete(category)
         db.session.commit()
         return ReturnCode.SUCCESS
