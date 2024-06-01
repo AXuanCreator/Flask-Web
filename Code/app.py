@@ -5,6 +5,7 @@ from Config import db, AppConfig
 from Admin import admin_bp
 from Book import book_bp
 from User import user_bp
+from User.Mail import mail
 
 def create_app():
 	# 创建Flask应用实例，对所有域名开放
@@ -24,9 +25,13 @@ def create_app():
 	with app.app_context():
 		db.create_all()  # 将ORM模型同步至数据库
 
+	# 初始化邮箱
+	mail.init_app(app)
+
 	return app
 
 
 if __name__ == '__main__':
 	app = create_app()
+
 	app.run()

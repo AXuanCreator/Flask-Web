@@ -4,21 +4,28 @@
 
 **本项目强烈建议Clone下来阅览**
 
-markdown：可以用 PyCharm直接打开  ||  VSCode装markdown插件查看  ||  VNote  ||  Typora
-
-Demo文件夹的例子均为可以调用，入口均为app.py
+图书管理系统
 
 
 
-TODO：
+特色：
 
-1.英文/俄语的Readme.md
+* 基于深度学习的图书推荐 (画饼状态)
+* 邮箱验证码
+* 登陆保持
+* ...
 
-2.Demo整合
-
-3.软件推荐
 
 
+注意：
+
+main分支为后端分离版本，将返回 JSON 数据格式；若想使用前后端不分离版本(使用基于JINJA2的HTML)，请切换到HTML分支再下载
+
+
+
+
+
+感谢  [YuXeng](https://github.com/YusJade) 与 [Serendipity](https://github.com/Serendipity-hjn) 对本项目的贡献
 
 ~~你是否承认，流萤小姐的盛世美貌盖世无双!~~
 

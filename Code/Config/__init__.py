@@ -3,5 +3,6 @@
 # 在其他模块里可直接通过 from Config import xxx 来导入包                                                                                                                                                                   流萤小姐与你同在
 ############################### CONFIG VERSION 1.0 ###############################
 
-from .app_config import *
+from .config import *
 from .db_models import *
+from .helper import *
