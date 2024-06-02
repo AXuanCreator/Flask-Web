@@ -16,10 +16,10 @@ class User(db.Model):
 	name = db.Column(db.String(20), nullable=True)
 	gender = db.Column(db.String(20), nullable=True)
 	phone = db.Column(db.String(80), unique=True, nullable=True)
-	mail = db.Column(db.String(80), unique=True, nullable=True)
+	email = db.Column(db.String(80), unique=True, nullable=True)
 	max_borrow_days = db.Column(db.BigInteger, default=-1)  # 若为-1，则说明Service出现问题
 	max_borrow_books = db.Column(db.BigInteger, default=-1)
-	creation_date = db.Column(db.DateTime, server_default=db.func.now())  # server_default有更高优先级
+	created_at = db.Column(db.DateTime, server_default=db.func.now())  # server_default有更高优先级
 
 
 class Admin(db.Model):
@@ -28,10 +28,10 @@ class Admin(db.Model):
 	username = db.Column(db.String(80), unique=True, nullable=True)
 	password = db.Column(db.String(80), nullable=True)
 	name = db.Column(db.String(20), nullable=True)
-	gender = db.Column(db.String(20), nullable=True)
+	# gender = db.Column(db.String(20), nullable=True)
 	phone = db.Column(db.String(80), unique=True, nullable=True)
-	mail = db.Column(db.String(80), unique=True, nullable=True)
-	creation_date = db.Column(db.DateTime, server_default=db.func.now())
+	email = db.Column(db.String(80), unique=True, nullable=True)
+	created_at = db.Column(db.DateTime, server_default=db.func.now())
 
 
 class Book(db.Model):
@@ -41,7 +41,7 @@ class Book(db.Model):
 	author = db.Column(db.String(20), nullable=True)
 	publisher = db.Column(db.String(20), nullable=True)
 	quantity = db.Column(db.Integer)
-	creation_date = db.Column(db.DateTime, server_default=db.func.now())
+	created_at = db.Column(db.DateTime, server_default=db.func.now())
 
 	# Foreign Key
 	category_id = db.Column(db.BigInteger, db.ForeignKey('tb_book_category.id'))
@@ -60,7 +60,7 @@ class Borrow(db.Model):
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
 	borrow_date = db.Column(db.DateTime, server_default=db.func.now())
 	return_date = db.Column(db.DateTime)
-	real_return_time = db.Column(db.DateTime)
+	really_return_date = db.Column(db.DateTime)
 
 	# Foreign Key
 	user_id = db.Column(db.BigInteger, db.ForeignKey('tb_user.id'))
