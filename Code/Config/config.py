@@ -2,6 +2,9 @@
 # 此模块用于设置Flask应用的配置
 # 可以通过app.config.from_object(AppConfig)来读取所有参数
 ############################### VERSION 1.0 ###############################
+import datetime
+
+
 class AppConfig():
 	# MySQL
 	HOSTNAME = '127.0.0.1'
@@ -16,6 +19,7 @@ class AppConfig():
 
 	# FLASK
 	DEBUG = True
+	PERMANENT_SESSION_LIFETIME = datetime.timedelta(seconds=600)    # 10min后Session过期
 
 	# MAIL
 	MAIL_SERVER = 'smtp.sinpor.top'
@@ -40,6 +44,7 @@ class UserConfig:
 	MAIL_CODE_LEN = 6
 	MAIL_CODE_OUTTIME = 600 # 10min
 
+	ALLOW_PATH = ['/user/login', '/user/register', '/user/send-code', '/user/test']
 
 class ReturnCode:
 	SUCCESS = 'SUCCESS'

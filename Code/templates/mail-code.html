@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> MAIL CODE </title>
+    <style>
+        {# CARD #}
+        .card {
+            position: absolute;
+            width: 290px;
+            height: 404px;
+            background: linear-gradient(40deg, rgb(255, 30, 0) 0%, rgb(0, 255, 255) 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10.5px);
+            -webkit-backdrop-filter: blur(10.5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .top {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10.5px);
+            -webkit-backdrop-filter: blur(10.5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 290px;
+            height: 300px;
+        }
+
+        .top .title {
+            color: #ffffff;
+            font-weight: bolder;
+            font-size: xx-large;
+            margin-left: 23%;
+            margin-top: 20%
+        }
+
+        .top .desc {
+            color: #ffffff;
+            opacity: 100%;
+            font-size: xxx-large;
+            font-weight: bold;
+            display: flex; /* 使用 Flexbox 布局 */
+            justify-content: center; /* 水平居中 */
+            margin-top: 30%;
+        }
+        .card .desc_bottom{
+            color: #99d2f1;
+            opacity: 50%;
+            font-size: medium;
+            font-weight: bold;
+            margin-left: 15px;
+            margin-top: 15px;
+        }
+        {# IMAGE #}
+        .image-container {
+            position: absolute;
+            top: -340px;
+            left: 10px;
+        }
+        .image {
+            transform: scale(0.33);
+            opacity: 85%;
+        }
+    </style>
+    <style>
+        {# 居中 #}
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="image-container">
+            <img src="https://axuan-picture.oss-cn-guangzhou.aliyuncs.com/ly_1.png" alt="ly_1" class="image">
+        </div>
+        <div class="top">
+            <p class="title">
+                Your Code
+            </p>
+            <p class="desc">
+                {{ CODE }}
+            </p>
+        </div>
+        <div class="desc_bottom">
+            "我梦见一片焦土，一株破土而生的新蕊。它迎着朝阳绽放，向我低语呢喃……"<br>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -45,16 +45,21 @@ class UserDao:
 		username, password, name, gender, phone, mail = (user_request.get(key) for key in request_keys)
 
 		# 检测
-		if username is not None and not RuleCheck.check_username_in_rules(username):
-			return ReturnCode.USERNAME_NOT_ALLOWED
-		if username is not None and RuleCheck.check_username_not_repeat(username):
-			return ReturnCode.USERNAME_REPEATED
+		if username is not None:
+			if not RuleCheck.check_username_in_rules(username):
+				return ReturnCode.USERNAME_NOT_ALLOWED
+			if username != db_user.username and not RuleCheck.check_username_not_repeat(username):
+				return ReturnCode.USERNAME_REPEATED
+
+		if mail is not None:
+			if not RuleCheck.check_mail_in_rules(mail):
+				return ReturnCode.MAIL_NOT_ALLOWED
+			if mail != db_user.mail and not RuleCheck.check_mail_not_repeat(mail):
+				return ReturnCode.MAIL_REPEATED
+
 		if gender is not None and not RuleCheck.check_gender_in_rules(gender):
 			return ReturnCode.GENDER_NOT_ALLOWED
-		if mail is not None and not RuleCheck.check_mail_in_rules(mail):
-			return ReturnCode.MAIL_NOT_ALLOWED
-		if mail is not None and not RuleCheck.check_mail_not_repeat(mail):
-			return ReturnCode.MAIL_REPEATED
+
 
 		db_user.username = username if username is not None else db_user.username
 		db_user.name = name if name is not None else db_user.name
@@ -148,7 +153,7 @@ class UserServices:
 
 	@staticmethod
 	def change_password(id, user_request):
-		return UserDao.update_user_id(id, user_request)
+		return UserDao.update_user_password(id, user_request)
 
 	@staticmethod
 	def update_user(id, user_request):
@@ -156,7 +161,7 @@ class UserServices:
 
 	@staticmethod
 	def send_mail(mail):
-		if not RuleCheck.check_mail_in_rules(mail):
+		if User.query.filter_by(mail=mail).first() is None or not RuleCheck.check_mail_in_rules(mail):
 			return ReturnCode.MAIL_NOT_ALLOWED
 
 		# 生成验证码
@@ -171,9 +176,11 @@ class UserServices:
 
 		return ReturnCode.FAIL
 
-
 	@staticmethod
 	def check_code(mail, code):
+		if User.query.filter_by(mail=mail).first() is None:
+			return ReturnCode.MAIL_NOT_ALLOWED
+
 		if code is None or code_recorder.get(mail) is None:
 			return ReturnCode.FAIL
 
@@ -184,7 +191,6 @@ class UserServices:
 
 			SendMail.remove_code(mail)
 
-
 			print('\033[35m[DEBUG]\033[0m | Code Recorder :  ', code_recorder)
 			print('\033[35m[DEBUG]\033[0m | Scheduler : ', currents_task)
 			return ReturnCode.SUCCESS
@@ -192,5 +198,5 @@ class UserServices:
 		if code == 'FIREFLYISBEAUTIFUL':
 			return ReturnCode.SUCCESS
 
-		# return ReturnCode.SUCCESS if code != None and (code_recorder.get(mail) != None and code == code_recorder[
-		# 	mail]) or code == 'FireflyIsSoBeautiful' else ReturnCode.FAIL
+	# return ReturnCode.SUCCESS if code != None and (code_recorder.get(mail) != None and code == code_recorder[
+	# 	mail]) or code == 'FireflyIsSoBeautiful' else ReturnCode.FAIL
