@@ -4,3 +4,5 @@
 
 from .book_controllers import *
 from .book_services import *
+from .bookcategory_controllers import *
+from .bookcategory_services import *
