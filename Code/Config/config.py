@@ -44,7 +44,7 @@ class UserConfig:
 	MAIL_CODE_LEN = 6
 	MAIL_CODE_OUTTIME = 600 # 10min
 
-	ALLOW_PATH = ['/user/login', '/user/register', '/user/send-code']
+	ALLOW_PATH = ['/user/login', '/user/register', '/user/send-code', '/user/test']
 
 class ReturnCode:
 	SUCCESS = 'SUCCESS'

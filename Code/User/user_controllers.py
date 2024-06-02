@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, session, redirect, url_for
+from flask import Flask, Blueprint, request, session, redirect, url_for, render_template
 
 from Config import ReturnCode, User, UserConfig
 from Utils import Response, ResponseCode, Helper
@@ -17,6 +17,10 @@ def user_login_interceptor():
 			return
 		if session.get('user_login') is None:
 			return redirect(url_for('user.user_login'))    # 重新导航到/login视图函数，需要包含蓝图名称
+
+@user_bp.route('/test')
+def test():
+	return render_template('mail-code.html')
 
 @user_bp.route('/login', methods=['POST'])
 def user_login():

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 from Config import db, AppConfig
@@ -6,6 +6,7 @@ from Admin import admin_bp
 from Book import book_bp
 from User import user_bp
 from User.Mail import mail
+
 
 def create_app():
 	# 创建Flask应用实例，对所有域名开放

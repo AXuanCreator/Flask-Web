@@ -1,5 +1,6 @@
 import random
 
+from flask import render_template, url_for
 from flask_mail import Mail, Message
 from Config import ReturnCode, UserConfig
 
@@ -19,7 +20,9 @@ class SendMail:
 		:return:
 		"""
 		message = Message('Your Code', recipients=[recipient])
-		message.body = code_recorder[recipient]
+		# message.body = code_recorder[recipient]
+
+		message.html = render_template('mail-code.html', CODE=code_recorder[recipient])
 
 		if html_body:
 			message.html = html_body
@@ -47,4 +50,3 @@ class SendMail:
 			del code_recorder[mail]
 		except Exception as e:
 			print('\033[36m[ERROR]\033[0m | Remove Code Fail')
-
