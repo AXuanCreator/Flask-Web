@@ -5,3 +5,7 @@ class Helper:
         print('\033[35m[DEBUG]\033[0m | TO DICT : ', json)
 
         return json
+
+    @staticmethod
+    def to_dict_list(orm_list):
+        return [Helper.to_dict(item) for item in orm_list]

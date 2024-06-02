@@ -24,6 +24,26 @@ class BookServices:
     def get_book(id):
         return Book.query.get(id)
 
+    # 根据关键词获取书籍
+    @staticmethod
+    def list_book(keywords, page, per_page):
+        query = Book.query
+
+        if 'title' in keywords:
+            query = query.filter(Book.title.like(f"%{keywords['title']}%"))
+        if 'author' in keywords:
+            query = query.filter(Book.author.like(f"%{keywords['author']}%"))
+        if 'publisher' in keywords:
+            query = query.filter(Book.publisher.like(f"%{keywords['publisher']}%"))
+        if 'category_id' in keywords and keywords['category_id'] is not None:
+            query = query.filter(Book.category_id == keywords['category_id'])
+
+        total = query.count()
+        books = query.offset((page - 1) * per_page).limit(per_page).all()
+
+        return books, total
+
+
     # 更新书籍信息
     @staticmethod
     def update_book(id, update_data):

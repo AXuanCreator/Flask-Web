@@ -14,11 +14,13 @@ class BookCategoryServices:
         db.session.commit()
         return ReturnCode.SUCCESS
 
-    # 显示全部分类
-    # todo 分页
+    # 分页显示全部分类
     @staticmethod
-    def get_book_categories():
-        return BookCategory.query.all()
+    def list_book_categories(page, per_page):
+        categories_query = BookCategory.query
+        total = categories_query.count()
+        categories = categories_query.offset((page - 1) * per_page).limit(per_page).all()
+        return categories, total
 
     # 根据名字搜索类别
     @staticmethod

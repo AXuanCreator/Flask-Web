@@ -1,3 +1,5 @@
+import math
+
 from flask import Flask, Blueprint, request
 
 from Config import ReturnCode, Book
@@ -48,6 +50,33 @@ def query_book_id(id):
         return Response.response(ResponseCode.SUCCESS, '书籍查找成功', Helper.to_dict(book))
     else:
         return Response.response(ResponseCode.BOOK_NOT_EXIST, '未找到书籍', None)
+
+
+# 根据关键词获取多个书籍
+# todo 分页
+@book_bp.route('/', methods=['GET'])
+def query_books():
+    keywords = request.json
+    try:
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 10))
+    except ValueError:
+        return Response.response(ResponseCode.FAILED, '参数错误', None)
+
+    books, total = BookServices.list_book(keywords, page, per_page)
+
+    if not books:
+        return Response.response(ResponseCode.BOOK_NOT_EXIST, "无符合条件的书籍", None)
+    else:
+        total_pages = math.ceil(total / per_page)
+        response_data = {
+            'books': Helper.to_dict_list(books),
+            'total': total,
+            'page': page,
+            'per_page': per_page,
+            'total_pages': total_pages
+        }
+        return Response.response(ResponseCode.SUCCESS, "书籍查找成功", response_data)
 
 
 # 修改书籍
