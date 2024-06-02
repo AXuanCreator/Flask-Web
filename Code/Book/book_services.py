@@ -7,14 +7,12 @@ class BookServices:
 
     # 插入书籍
     @staticmethod
-    def insert_book(new_book):
-        insert_book = Book(
-            title=new_book.title,
-            author=new_book.author,
-            category_id=new_book.category_id,
-            publisher=new_book.publisher,
-            quantity=new_book.quantity
-        )
+    def insert_book(book_request):
+        request_keys = ['title', 'author', 'category', 'publisher', 'quantity']
+        title, author, category, publisher, quantity = (book_request.get(key) for key in request_keys)
+
+        insert_book = Book(title=title, author=author, category=category, publisher=publisher, quantity=quantity)
+
         db.session.add(insert_book)
         db.session.commit()
         return ReturnCode.SUCCESS
@@ -42,7 +40,6 @@ class BookServices:
         books = query.offset((page - 1) * per_page).limit(per_page).all()
 
         return books, total
-
 
     # 更新书籍信息
     @staticmethod

@@ -28,7 +28,6 @@ class Admin(db.Model):
 	username = db.Column(db.String(80), unique=True, nullable=True)
 	password = db.Column(db.String(80), nullable=True)
 	name = db.Column(db.String(20), nullable=True)
-	# gender = db.Column(db.String(20), nullable=True)
 	phone = db.Column(db.String(80), unique=True, nullable=True)
 	email = db.Column(db.String(80), unique=True, nullable=True)
 	created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -37,7 +36,7 @@ class Admin(db.Model):
 class Book(db.Model):
 	__tablename__ = 'tb_book'
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-	title = db.Column(db.String(80), nullable=True)
+	title = db.Column(db.String(80), unique=True, nullable=True)
 	author = db.Column(db.String(20), nullable=True)
 	publisher = db.Column(db.String(20), nullable=True)
 	quantity = db.Column(db.Integer)
@@ -52,7 +51,7 @@ class BookCategory(db.Model):
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
 	name = db.Column(db.String(20), unique=True, nullable=True)
 	quantity = db.Column(db.Integer)
-	creation_date = db.Column(db.DateTime, server_default=db.func.now())
+	create_at = db.Column(db.DateTime, server_default=db.func.now())
 
 
 class Borrow(db.Model):

@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, request
-from Admin.admin_services import AdminService
-from Utils.response import ResponseCode, Response
-from Utils.helper import Helper
+from .admin_services import AdminService
+from Utils import ResponseCode, Response
+from Utils import Helper
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -19,6 +19,7 @@ def login():
     if res_code == -1:
         return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '管理员不存在', 0)
 
+
 @admin_bp.route('/<int:id>', methods=['GET'])
 def query_admin_info(id):
     """获取管理员的基本信息"""
@@ -26,6 +27,7 @@ def query_admin_info(id):
     if admin:
         return Response.response(ResponseCode.SUCCESS, '查询成功', Helper.to_dict(admin))
     return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '用户不存在', 0)
+
 
 @admin_bp.route('/<int:id>', methods=['PUT'])
 def modify_admin_info(id):
@@ -36,6 +38,7 @@ def modify_admin_info(id):
     if res_code == -1:
         return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '管理员不存在', 0)
     return Response.response(ResponseCode.FAILED, '系统错误', 0)
+
 
 @admin_bp.route('/<int:id>/password', methods=['PUT'])
 def modify_admin_password(id):
