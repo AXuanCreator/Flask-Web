@@ -50,9 +50,9 @@ class BookServices:
 
 		return books, total
 
-	# 更新书籍信息
 	@staticmethod
 	def update_book(id, update_data):
+		"""更新书籍信息"""
 		book = Book.query.get(id)
 		if 'title' in update_data:
 			book.title = update_data['title']
