@@ -65,6 +65,8 @@ class BookServices:
         if not book:
             return ReturnCode.BOOK_NOT_EXIST
 
+
+
         db.session.delete(book)
         db.session.commit()
         return ReturnCode.SUCCESS
