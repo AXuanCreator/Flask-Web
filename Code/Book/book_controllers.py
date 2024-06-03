@@ -17,6 +17,8 @@ def book_info():
 		match BookServices.insert_book(book_request):
 			case ReturnCode.SUCCESS:
 				return Response.response(ResponseCode.SUCCESS, '图书添加成功', Book.query.filter_by(title=book_request.get('title')).first())
+			case ReturnCode.FAIL:
+				return Response.response(ResponseCode.FAILED, '信息有误或获取分类失败', None)
 			case _:
 				return Response.response(ResponseCode.BAD_REQUEST, '连接失败', None)
 
@@ -58,9 +60,11 @@ def book_operation(id):
 	elif request.method == 'PUT':
 		# 更新书籍信息
 		book_request = request.get_json()
-		BookServices.update_book(id, book_request)
-		result = BookServices.get_book(id)
-		return Response.response(ResponseCode.SUCCESS, '书籍更改成功', Helper.to_dict(result))
+		match BookServices.update_book(id, book_request):
+			case ReturnCode.SUCCESS:
+				return Response.response(ResponseCode.SUCCESS, '书籍更改成功', Helper.to_dict(Book.query.get(id)))
+			case ReturnCode.FAIL:
+				return Response.response(ResponseCode.FAILED, '未找到书籍分类', None)
 
 	elif request.method == 'DELETE':
 		# 删除书籍
@@ -69,3 +73,5 @@ def book_operation(id):
 				return Response.response(ResponseCode.SUCCESS, '书籍删除成功', id)
 			case ReturnCode.BOOK_NOT_EXIST:
 				return Response.response(ResponseCode.BOOK_NOT_EXIST, '未找到书籍', None)
+			case ReturnCode.FAIL:
+				return Response.response(ResponseCode.FAILED, '对应书籍的分类不存在', None)
