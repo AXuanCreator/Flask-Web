@@ -20,7 +20,7 @@ def user_login_interceptor():
 
 @user_bp.route('/test')
 def test():
-	return render_template('mail-code.html')
+	return render_template('login.html')
 
 @user_bp.route('/login', methods=['POST'])
 def user_login():

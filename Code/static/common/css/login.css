@@ -1,0 +1,149 @@
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box {
+    position: relative;
+    width: 440px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    z-index: 1;
+}
+
+/* 背板 */
+.box::before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 115px;
+    width: 50%;
+    height: 100%;
+    text-decoration: none;
+    background: #fff;
+    border-radius: 8px;
+    transform: skewX(15deg);
+    transition: 0.5s;
+}
+
+/* 背板阴影 */
+.box::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 115px;
+    width: 50%;
+    height: 100%;
+    background: #fff;
+    border-radius: 8px;
+    transform: skewX(15deg);
+    transition: 0.5s;
+    filter: blur(30px);
+}
+
+/* 鼠标悬停时，发生位移 | :hover表示鼠标悬停 */
+.box:hover:before,
+.box:hover:after {
+    transform: skewX(0deg) scaleX(1.3);
+}
+
+.box:before,
+.box:after {
+    background: linear-gradient(315deg, rgba(255, 255, 255, 0.1), #02ffff);
+    /*background: linear-gradient(315deg, rgb(255, 67, 0), #02ffff);*/
+}
+
+.box .content {
+    position: relative;
+    width: 380px;
+    height: 508px;
+    padding: 20px 40px;
+    background: rgba(66, 66, 66, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1;
+    transition: transform 0.5s;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box .content h1 {
+    font-size: 40px;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 90px;
+}
+
+.box .content label {
+    font-size: 20px;
+    color: #ffffff;
+    position: absolute;
+    top: 100px;
+    left: 20px;
+}
+
+.box .content .input {
+    color: #fff;
+    font-size: 0.9rem;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    border-bottom: var(--border-height) solid var(--border-before-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.box .content .input-border {
+    position: absolute;
+    background: var(--border-after-color);
+    width: 0%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.box .content .input:focus {
+    outline: none;
+}
+
+.box .content .input:focus + .box .content .input-border {
+    width: 100%;
+}
+
+.box .content .form-control {
+    position: absolute;
+    --width-of-input: 300px;
+    top: 120px;
+    left: 85px;
+}
+
+.box .content .input-alt {
+    font-size: 1.2rem;
+    padding-inline: 1em;
+    padding-block: 0.8em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.box .content .input-border-alt {
+    height: 3px;
+    background: linear-gradient(90deg, #FF6464 0%, #FFBF59 50%, #47C9FF 100%);
+    transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
+}
+
+.box .content .input-alt:focus + .input-border-alt {
+    width: 100%;
+}
