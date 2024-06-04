@@ -22,8 +22,11 @@ def user_login_interceptor():
 def test():
 	return render_template('login.html')
 
-@user_bp.route('/login', methods=['POST'])
+@user_bp.route('/login', methods=['GET', 'POST'])
 def user_login():
+	if request.method == 'GET':
+		return render_template('login.html')
+
 	assert request.method == 'POST'
 
 	user_request = request.get_json()

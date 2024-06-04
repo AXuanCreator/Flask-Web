@@ -56,7 +56,7 @@
 
 .box:before,
 .box:after {
-    background: linear-gradient(315deg, rgba(255, 255, 255, 0.1), #02ffff);
+    background: linear-gradient(315deg, rgb(255, 66, 50), #02ffff);
     /*background: linear-gradient(315deg, rgb(255, 67, 0), #02ffff);*/
 }
 
@@ -93,7 +93,8 @@
     left: 20px;
 }
 
-.box .content .input {
+/* 输入框 */
+.input {
     color: #fff;
     font-size: 0.9rem;
     background-color: transparent;
@@ -102,48 +103,182 @@
     padding-inline: 0.5em;
     padding-block: 0.7em;
     border: none;
-    border-bottom: var(--border-height) solid var(--border-before-color);
+    border-bottom: var() solid var();   /* var()类似于auto */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.box .content .input-border {
+.input-border {
     position: absolute;
-    background: var(--border-after-color);
-    width: 0%;
+    background: var();
+    width: 0;
     height: 2px;
     bottom: 0;
     left: 0;
     transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
-.box .content .input:focus {
+.input:focus {
     outline: none;
 }
 
-.box .content .input:focus + .box .content .input-border {
+.input:focus + .input-border {
     width: 100%;
 }
 
-.box .content .form-control {
+.form-control {
     position: absolute;
     --width-of-input: 300px;
     top: 120px;
     left: 85px;
 }
 
-.box .content .input-alt {
+.input-alt {
     font-size: 1.2rem;
     padding-inline: 1em;
     padding-block: 0.8em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.box .content .input-border-alt {
+.input-border-alt {
     height: 3px;
-    background: linear-gradient(90deg, #FF6464 0%, #FFBF59 50%, #47C9FF 100%);
+    background: linear-gradient(90deg, #008cff 0%, #04ffff 50%, #c6ffff 100%);
     transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
 }
 
-.box .content .input-alt:focus + .input-border-alt {
+.input-alt:focus + .input-border-alt {
     width: 100%;
+}
+
+/* 复选框 */
+.cyberpunk-checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #30cfd0;
+    border-radius: 5px;
+    background-color: transparent;
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.cyberpunk-checkbox:before {
+    content: "";
+    background-color: #30cfd0;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+}
+
+.cyberpunk-checkbox:checked:before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.cyberpunk-checkbox-label {
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+
+.scalex {
+    transform: scaleX(-1);
+}
+
+/* 按钮 */
+button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+button.learn-more {
+    width: 18rem;
+    height: auto;
+}
+
+button.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(315deg, rgb(255, 138, 103), #89ffff);
+    border-radius: 1.625rem;
+}
+
+button.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #fff;
+}
+
+button.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    left: 0.625rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+}
+
+button.learn-more .circle .icon.arrow::before {
+    position: absolute;
+    content: "";
+    top: -0.29rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.125rem solid #fff;
+    border-right: 0.125rem solid #fff;
+    transform: rotate(45deg);
+}
+
+button.learn-more .button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.85rem;
+    color: #000000;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+button:hover .circle {
+    width: 100%;
+}
+
+button:hover .circle .icon.arrow {
+    background: #fff;
+    transform: translate(1rem, 0);
+}
+
+button:hover .button-text {
+    color: #fff;
 }
