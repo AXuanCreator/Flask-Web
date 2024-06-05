@@ -16,11 +16,6 @@ class BookServices:
 
 		insert_book = Book(title=title, author=author, category_id=category_id, publisher=publisher, quantity=quantity)
 
-		db_category = BookCategory.query.get(category_id)
-		if db_category is None:
-			return ReturnCode.FAIL
-		db_category.quantity += 1
-
 		db.session.add(insert_book)
 		db.session.commit()
 
@@ -63,16 +58,7 @@ class BookServices:
 		if 'quantity' in update_data:
 			book.quantity = update_data['quantity']
 		if 'category_id' in update_data:
-			db_category = BookCategory.query.get(book.category_id)
-			if db_category is None:
-				return ReturnCode.FAIL
-			db_category.quantity -= 1
-
 			book.category_id = update_data['category_id']
-			new_db_category = BookCategory.query.get(book.category_id)  # 获取新分类的id
-			if new_db_category is None:
-				return ReturnCode.FAIL
-			new_db_category.quantity += 1
 
 		db.session.add(book)
 		db.session.commit()
@@ -86,13 +72,6 @@ class BookServices:
 		if not book:
 			return ReturnCode.BOOK_NOT_EXIST
 
-		book_category_id = book.get('category_id')
-		db_category = BookCategory.query.get(book_category_id)
-
-		if db_category is None:
-			return ReturnCode.FAIL
-
-		db_category.quantity -= 1  # 对应分类的数量-1
 		db.session.delete(book)
 		db.session.commit()
 
