@@ -27,29 +27,28 @@ def user_login():
 	if request.method == 'GET':
 		return render_template('login.html')
 
-	assert request.method == 'POST'
+	if request.method == 'POST':
+		user_request = request.get_json()
+		username = user_request.get('username')
+		password = user_request.get('password')
 
-	user_request = request.get_json()
-	username = user_request.get('username')
-	password = user_request.get('password')
+		print('\033[35m[DEBUG]\033[0m | Login | Session : ', session)
 
-	print('\033[35m[DEBUG]\033[0m | Login | Session : ', session)
+		if session.get('user_login'):
+			return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)
 
-	if session.get('user_login'):
-		return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)
-
-	# 仅在Python>=3.10可用match case
-	match UserServices.login(username, password):
-		case ReturnCode.SUCCESS:
-			session['user_login'] = username
-			session.permanent = True  # 启用Config的Session清空时间
-			return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)  # TODO:加入Session
-		case ReturnCode.USER_NOT_EXIST:
-			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
-		case ReturnCode.PASSWORD_NOT_ALLOWED:
-			return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Wrong', None)
-		case _:
-			print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
+		# 仅在Python>=3.10可用match case
+		match UserServices.login(username, password):
+			case ReturnCode.SUCCESS:
+				session['user_login'] = username
+				session.permanent = True  # 启用Config的Session清空时间
+				return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)  # TODO:加入Session
+			case ReturnCode.USER_NOT_EXIST:
+				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
+			case ReturnCode.PASSWORD_NOT_ALLOWED:
+				return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Wrong', None)
+			case _:
+				print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
 
 
 @user_bp.route('/register', methods=['POST'])
