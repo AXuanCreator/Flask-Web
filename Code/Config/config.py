@@ -75,7 +75,7 @@ class Regex:
 	(?=.*[...]) ：正向肯定预查，表示字符串里至少包含一个符合[...]规则的字符
 	"""
 	username_pattern = r'^[a-zA-Z][a-zA-Z0-9]{4,}$'
-	password_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$'
+	password_pattern = r'^(?=.*[a-z])(?=.*[A-Z]).{8,}$'
 	mail_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$'
 
 	# 这个并非为正则表达式，但依旧放在这里

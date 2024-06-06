@@ -16,7 +16,7 @@ class User(db.Model):
 	name = db.Column(db.String(20), nullable=False)
 	gender = db.Column(db.String(20), nullable=False)
 	phone = db.Column(db.String(80), unique=True, nullable=False)
-	email = db.Column(db.String(80), unique=True, nullable=False)
+	mail = db.Column(db.String(80), unique=True, nullable=False)
 	max_borrow_days = db.Column(db.BigInteger, default=-1)  # 若为-1，则说明Service出现问题
 	max_borrow_books = db.Column(db.BigInteger, default=-1)
 	created_at = db.Column(db.DateTime, server_default=db.func.now())  # server_default有更高优先级

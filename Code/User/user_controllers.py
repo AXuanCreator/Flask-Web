@@ -25,56 +25,62 @@ def test():
     return render_template('login.html')
 
 
-@user_bp.route('/login', methods=['POST'])
+@user_bp.route('/login', methods=['GET', 'POST'])
 def user_login():
-    assert request.method == 'POST'
+    if request.method == 'GET':
+        return render_template('login.html')
 
-    user_request = request.get_json()
-    username = user_request.get('username')
-    password = user_request.get('password')
+    elif request.method == 'POST':
+        user_request = request.form
+        username = user_request.get('username')
+        password = user_request.get('password')
+        remember_me = user_request.get('remember_me')
 
-    print('\033[35m[DEBUG]\033[0m | Login | Session : ', session)
+        print('\033[35m[DEBUG]\033[0m | Login | Session : ', session)
 
-    if session.get('user_login'):
-        return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)
+        if session.get('user_login'):
+            return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)
 
-    # 仅在Python>=3.10可用match case
-    match UserServices.login(username, password):
-        case ReturnCode.SUCCESS:
-            session['user_login'] = username
-            session.permanent = True  # 启用Config的Session清空时间
-            return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)  # TODO:加入Session
-        case ReturnCode.USER_NOT_EXIST:
-            return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
-        case ReturnCode.PASSWORD_NOT_ALLOWED:
-            return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Wrong', None)
-        case _:
-            print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
+        # 仅在Python>=3.10可用match case
+        match UserServices.login(username, password):
+            case ReturnCode.SUCCESS:
+                if remember_me is not None:
+                    session['user_login'] = username
+                    session.permanent = True  # 启用Config的Session清空时间
+                return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)  # TODO:加入Session
+            case ReturnCode.USER_NOT_EXIST:
+                return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
+            case ReturnCode.PASSWORD_NOT_ALLOWED:
+                return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Wrong', None)
+            case _:
+                print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
 
 
-@user_bp.route('/register', methods=['POST'])
+@user_bp.route('/register', methods=['GET', 'POST'])
 def user_register():
-    assert request.method == 'POST'
+    if request.method == 'GET':
+        return render_template('register.html')
 
-    user_request = request.get_json()
-    match UserServices.register(user_request):
-        case ReturnCode.SUCCESS:
-            return Response.response(ResponseCode.SUCCESS, 'Register Success', User.query.filter_by(
-                username=user_request.get('username')).first().id)
-        case ReturnCode.USERNAME_NOT_ALLOWED:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Username Format Wrong', None)
-        case ReturnCode.USERNAME_REPEATED:
-            return Response.response(ResponseCode.USERNAME_REPEATED, 'Username Has Been Registered', None)
-        case ReturnCode.PASSWORD_NOT_ALLOWED:
-            return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
-        case ReturnCode.MAIL_NOT_ALLOWED:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
-        case ReturnCode.MAIL_REPEATED:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
-        case ReturnCode.INFO_NOT_ALLOWED:
-            return Response.response(ResponseCode.BAD_REQUEST, 'Enter All Information', None)
-        case _:
-            print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
+    elif request.method == 'POST':
+        user_request = request.get_json()
+        match UserServices.register(user_request):
+            case ReturnCode.SUCCESS:
+                return Response.response(ResponseCode.SUCCESS, 'Register Success', User.query.filter_by(
+                    username=user_request.get('username')).first().id)
+            case ReturnCode.USERNAME_NOT_ALLOWED:
+                return Response.response(ResponseCode.BAD_REQUEST, 'Username Format Wrong', None)
+            case ReturnCode.USERNAME_REPEATED:
+                return Response.response(ResponseCode.USERNAME_REPEATED, 'Username Has Been Registered', None)
+            case ReturnCode.PASSWORD_NOT_ALLOWED:
+                return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
+            case ReturnCode.MAIL_NOT_ALLOWED:
+                return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
+            case ReturnCode.MAIL_REPEATED:
+                return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
+            case ReturnCode.INFO_NOT_ALLOWED:
+                return Response.response(ResponseCode.BAD_REQUEST, 'Enter All Information', None)
+            case _:
+                print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
 
 
 @user_bp.route('/<id>/deregister', methods=['DELETE'])
@@ -88,18 +94,20 @@ def user_deregister(id):
             return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
 
-@user_bp.route('/send-code', methods=['POST'])
+@user_bp.route('/send-code', methods=['GET', 'POST'])
 def user_send_code():
-    assert request.method == 'POST'
+    if request.method == 'GET':
+        return None
 
-    mail = request.get_json().get('mail')
-    match UserServices.send_mail(mail):
-        case ReturnCode.SUCCESS:
-            return Response.response(ResponseCode.SUCCESS, 'Send Mail Success', mail)
-        case ReturnCode.FAIL:
-            return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
-        case ReturnCode.MAIL_NOT_ALLOWED:
-            return Response.response(ResponseCode.FAILED, 'Mail Wrong', None)
+    elif request.method == 'POST':
+        mail = request.form.get('mail')
+        match UserServices.send_mail(mail):
+            case ReturnCode.SUCCESS:
+                return Response.response(ResponseCode.SUCCESS, 'Send Mail Success', mail)
+            case ReturnCode.FAIL:
+                return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+            case ReturnCode.MAIL_NOT_ALLOWED:
+                return Response.response(ResponseCode.FAILED, 'Mail Wrong', None)
 
 
 @user_bp.route('/<mail>/code', methods=['POST'])
