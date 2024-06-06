@@ -1,8 +1,9 @@
 import random
 from threading import Timer
 
-from Config import User, ReturnCode, RuleCheck, db, UserConfig
+from Config import User, ReturnCode, db, UserConfig
 from User.Mail import SendMail, code_recorder
+from User.user_helper import RuleCheck
 
 currents_task = {}
 

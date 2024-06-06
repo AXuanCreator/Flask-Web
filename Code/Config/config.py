@@ -19,7 +19,7 @@ class AppConfig():
 
 	# FLASK
 	DEBUG = True
-	PERMANENT_SESSION_LIFETIME = datetime.timedelta(seconds=600)    # 10min后Session过期
+	PERMANENT_SESSION_LIFETIME = datetime.timedelta(seconds=600)  # 10min后Session过期
 
 	# MAIL
 	MAIL_SERVER = 'smtp.sinpor.top'
@@ -42,9 +42,10 @@ class UserConfig:
 
 	MAIL_CODE = '0123456789'
 	MAIL_CODE_LEN = 6
-	MAIL_CODE_OUTTIME = 600 # 10min
+	MAIL_CODE_OUTTIME = 600  # 10min
 
 	ALLOW_PATH = ['/user/login', '/user/register', '/user/send-code', '/user/test']
+
 
 class ReturnCode:
 	SUCCESS = 'SUCCESS'
@@ -62,6 +63,7 @@ class ReturnCode:
 	CATEGORY_EXIST = 'CATEGORYEXIST'
 	CATEGORY_NOT_EXIST = 'CATEGORYNOTEXIST'
 
+
 class Regex:
 	"""
 	正则表达式
@@ -75,3 +77,10 @@ class Regex:
 	username_pattern = r'^[a-zA-Z][a-zA-Z0-9]{4,}$'
 	password_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$'
 	mail_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$'
+
+	# 这个并非为正则表达式，但依旧放在这里
+	name_pattern = "王张李赵陈刘周林孙吴郑蒋沈韩杨朱秦许何吕施张孔曹严华金魏陶姜陈韩小逸黄陡晓臭榴称泉黎船新锈遍实米吵侮冈僵够纯泥盗极闲续挣王琴感言范赏欲厉喉资御假或种尚准常忧锤衣飞寺代合态务礼杆触植铺忍膝转哥痰打梳田迫须程搜影简猎福伶悔位巷拨疫康挠毒泊苍刃悟钱语惯界氏"
+
+
+class TrainConfig:
+	epoch = 40

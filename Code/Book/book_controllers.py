@@ -75,3 +75,13 @@ def book_operation(id):
 				return Response.response(ResponseCode.BOOK_NOT_EXIST, '未找到书籍', None)
 			case ReturnCode.FAIL:
 				return Response.response(ResponseCode.FAILED, '对应书籍的分类不存在', None)
+
+@book_bp.route('/<id>/recommend', methods=['GET'])
+def book_recommend(id):
+	if request.method == 'GET':
+		recommend_list = BookServices.recommend_book(id)
+
+		if recommend_list:
+			return Response.response(ResponseCode.SUCCESS, '推荐成功', recommend_list)
+
+		return Response.response(ResponseCode.FAILED, '推荐失败', None)

@@ -24,6 +24,9 @@ conda activate flask-web
 conda install flask pymysql flask-sqlalchemy flask_cors  -y 
 
 pip install flask-migrate flask_caching
+
+# OPTION
+conda install pytorch tqdm pandas -y 	# 基于深度学习的书籍推荐
 ```
 
 

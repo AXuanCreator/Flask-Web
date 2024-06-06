@@ -11,12 +11,12 @@ db = SQLAlchemy()
 class User(db.Model):
 	__tablename__ = 'tb_user'
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-	username = db.Column(db.String(80), unique=True, nullable=True)
-	password = db.Column(db.String(80), nullable=True)
-	name = db.Column(db.String(20), nullable=True)
-	gender = db.Column(db.String(20), nullable=True)
-	phone = db.Column(db.String(80), unique=True, nullable=True)
-	email = db.Column(db.String(80), unique=True, nullable=True)
+	username = db.Column(db.String(80), unique=True, nullable=False)
+	password = db.Column(db.String(80), nullable=False)
+	name = db.Column(db.String(20), nullable=False)
+	gender = db.Column(db.String(20), nullable=False)
+	phone = db.Column(db.String(80), unique=True, nullable=False)
+	email = db.Column(db.String(80), unique=True, nullable=False)
 	max_borrow_days = db.Column(db.BigInteger, default=-1)  # 若为-1，则说明Service出现问题
 	max_borrow_books = db.Column(db.BigInteger, default=-1)
 	created_at = db.Column(db.DateTime, server_default=db.func.now())  # server_default有更高优先级
@@ -25,20 +25,20 @@ class User(db.Model):
 class Admin(db.Model):
 	__tablename__ = 'tb_admin'
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-	username = db.Column(db.String(80), unique=True, nullable=True)
-	password = db.Column(db.String(80), nullable=True)
-	name = db.Column(db.String(20), nullable=True)
-	phone = db.Column(db.String(80), unique=True, nullable=True)
-	email = db.Column(db.String(80), unique=True, nullable=True)
+	username = db.Column(db.String(80), unique=True, nullable=False)
+	password = db.Column(db.String(80), nullable=False)
+	name = db.Column(db.String(20), nullable=False)
+	phone = db.Column(db.String(80), unique=True, nullable=False)
+	email = db.Column(db.String(80), unique=True, nullable=False)
 	created_at = db.Column(db.DateTime, server_default=db.func.now())
 
 
 class Book(db.Model):
 	__tablename__ = 'tb_book'
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-	title = db.Column(db.String(80), unique=True, nullable=True)
-	author = db.Column(db.String(20), nullable=True)
-	publisher = db.Column(db.String(20), nullable=True)
+	title = db.Column(db.String(100), unique=True, nullable=False)
+	author = db.Column(db.String(150), nullable=False)
+	publisher = db.Column(db.String(50), nullable=False)
 	quantity = db.Column(db.Integer)
 	created_at = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -49,7 +49,7 @@ class Book(db.Model):
 class BookCategory(db.Model):
 	__tablename__ = 'tb_book_category'
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-	name = db.Column(db.String(20), unique=True, nullable=True)
+	name = db.Column(db.String(40), unique=True, nullable=False)
 	quantity = db.Column(db.Integer)
 	create_at = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -64,3 +64,14 @@ class Borrow(db.Model):
 	# Foreign Key
 	user_id = db.Column(db.BigInteger, db.ForeignKey('tb_user.id'))
 	book_id = db.Column(db.BigInteger, db.ForeignKey('tb_book.id'))
+
+class BookRating(db.Model):
+	__tablename__ = 'tb_book_rating'
+	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+	rating = db.Column(db.Integer, nullable=False)
+
+	user_id = db.Column(db.BigInteger)
+	book_id = db.Column(db.BigInteger)
+	# # Foreign Key
+	# user_id = db.Column(db.BigInteger, db.ForeignKey('tb_user.id'))
+	# book_id = db.Column(db.BigInteger, db.ForeignKey('tb_book.id'))

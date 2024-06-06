@@ -1,0 +1,12 @@
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (1, 'Fiction', 36603, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (2, 'Non-Fiction', 35592, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (3, 'Mystery', 36167, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (4, 'Science Fiction', 36185, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (5, 'Fantasy', 35777, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (6, 'Biography', 38160, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (7, 'History', 38319, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (8, 'Children\'s', 35802, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (9, 'Romance', 39005, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (10, 'Self-Help', 34801, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (11, 'Health', 35297, '2024-06-05 20:12:49');
+INSERT INTO `flask-web`.tb_book_category (id, name, quantity, create_at) VALUES (12, 'Travel', 38150, '2024-06-05 20:12:49');

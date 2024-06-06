@@ -1,7 +1,8 @@
 #!/user/bin/env python3
 # -*- coding: utf-8 -*-
-from Config import Book, ReturnCode, db, BookCategory
-
+from Config import Book, ReturnCode, db, BookCategory, Borrow
+from Recommend import infer
+from sqlalchemy import func
 
 class BookServices:
 
@@ -15,11 +16,6 @@ class BookServices:
 			return ReturnCode.FAIL
 
 		insert_book = Book(title=title, author=author, category_id=category_id, publisher=publisher, quantity=quantity)
-
-		db_category = BookCategory.query.get(category_id)
-		if db_category is None:
-			return ReturnCode.FAIL
-		db_category.quantity += 1
 
 		db.session.add(insert_book)
 		db.session.commit()
@@ -63,16 +59,7 @@ class BookServices:
 		if 'quantity' in update_data:
 			book.quantity = update_data['quantity']
 		if 'category_id' in update_data:
-			db_category = BookCategory.query.get(book.category_id)
-			if db_category is None:
-				return ReturnCode.FAIL
-			db_category.quantity -= 1
-
 			book.category_id = update_data['category_id']
-			new_db_category = BookCategory.query.get(book.category_id)  # 获取新分类的id
-			if new_db_category is None:
-				return ReturnCode.FAIL
-			new_db_category.quantity += 1
 
 		db.session.add(book)
 		db.session.commit()
@@ -86,14 +73,24 @@ class BookServices:
 		if not book:
 			return ReturnCode.BOOK_NOT_EXIST
 
-		book_category_id = book.get('category_id')
-		db_category = BookCategory.query.get(book_category_id)
-
-		if db_category is None:
-			return ReturnCode.FAIL
-
-		db_category.quantity -= 1  # 对应分类的数量-1
 		db.session.delete(book)
 		db.session.commit()
 
 		return ReturnCode.SUCCESS
+
+	@staticmethod
+	def recommend_book(id):
+		"""推荐书籍"""
+		borrow_list = [borrow.book_id for borrow in Borrow.query.filter_by(user_id=id)]
+		book_list = [ book.id for book in Book.query.order_by(func.random()).limit(5).all()]
+
+		if borrow_list is None:
+			return None
+
+		recommend_list = infer(borrow_list, book_list)
+		recommend_list = [book_id for book_id, rating in zip(book_list, recommend_list) if rating > 3.7]    # TODO : 为什么是3.7为分界点呢，因为模型有点问题，收敛3.7左右
+
+		if recommend_list is None:
+			return None
+
+		return recommend_list
