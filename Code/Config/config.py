@@ -83,4 +83,4 @@ class Regex:
 
 
 class TrainConfig:
-	epoch = 20
+	epoch = 40
