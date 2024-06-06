@@ -35,7 +35,7 @@ Code目录下为Flask-Web本体，其余是演示项目及教程文档
 
 此预览为 **Jinja** 分支内容
 
-<img src="assets/alpha1.gif" alt="alpha1" style="zoom:50%;" />
+<img src="./Docs/assets/alpha1.gif" alt="alpha1" style="zoom:50%;" />
 
 </br>
 
