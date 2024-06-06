@@ -3,8 +3,6 @@ from torch import nn
 
 from .network import RecommendNet
 
-print('\n')
-
 
 def infer(borrow_list, book_list):
 	model = RecommendNet(1)
