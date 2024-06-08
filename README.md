@@ -55,7 +55,7 @@ TODO：将会提供可执行文件
     # 一下命令在终端运行
     conda create -n flask-web python=3.10 -y
     conda activate flask-web
-    conda install flask pymysql flask-sqlalchemy flask_cors  -y 
+    conda install flask pymysql flask-sqlalchemy flask_cors  requests -y 
     pip install flask-migrate flask_caching
     conda install pytorch tqdm pandas -y 	# 深度学习框架，可能会较大
     ```

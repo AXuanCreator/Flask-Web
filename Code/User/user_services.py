@@ -61,7 +61,6 @@ class UserDao:
 		if gender is not None and not RuleCheck.check_gender_in_rules(gender):
 			return ReturnCode.GENDER_NOT_ALLOWED
 
-
 		db_user.username = username if username is not None else db_user.username
 		db_user.name = name if name is not None else db_user.name
 		db_user.gender = gender if gender is not None else db_user.gender
@@ -102,7 +101,7 @@ class UserDao:
 
 	## INSERT ##
 	@staticmethod
-	def insert_user(user_request):
+	def insert_user(user_request, commit=True):
 		result_keys = ['username', 'password', 'name', 'gender', 'phone', 'mail']
 		username, password, name, gender, phone, mail = (user_request.get(key) for key in result_keys)
 
@@ -126,8 +125,11 @@ class UserDao:
 
 		insert_user = User(username=username, password=password, name=name, gender=gender, phone=phone, mail=mail,
 		                   max_borrow_days=UserConfig.MAX_BORROW_DAYS, max_borrow_books=UserConfig.MAX_BORROW_BOOKS)
+
 		db.session.add(insert_user)
-		db.session.commit()
+		print(db.session.new, db.session.dirty, db.session.deleted)
+		if commit:
+			db.session.commit()
 
 		return ReturnCode.SUCCESS
 
@@ -145,8 +147,8 @@ class UserServices:
 		return ReturnCode.SUCCESS
 
 	@staticmethod
-	def register(user_request):
-		return UserDao.insert_user(user_request)
+	def register(user_request, commit=True):
+		return UserDao.insert_user(user_request, commit)
 
 	@staticmethod
 	def deregister(id):
@@ -162,7 +164,7 @@ class UserServices:
 
 	@staticmethod
 	def send_mail(mail):
-		if User.query.filter_by(mail=mail).first() is None or not RuleCheck.check_mail_in_rules(mail):
+		if not RuleCheck.check_mail_in_rules(mail):  # TODO:检测注册或忘记密码时邮箱需不需要存在于数据库
 			return ReturnCode.MAIL_NOT_ALLOWED
 
 		# 生成验证码
@@ -178,8 +180,8 @@ class UserServices:
 		return ReturnCode.FAIL
 
 	@staticmethod
-	def check_code(mail, code):
-		if User.query.filter_by(mail=mail).first() is None:
+	def check_code(mail, code, need_user_check=True):
+		if need_user_check and User.query.filter_by(mail=mail).first() is None:
 			return ReturnCode.MAIL_NOT_ALLOWED
 
 		if code is None or code_recorder.get(mail) is None:
@@ -199,5 +201,5 @@ class UserServices:
 		if code == 'FIREFLYISBEAUTIFUL':
 			return ReturnCode.SUCCESS
 
-	# return ReturnCode.SUCCESS if code != None and (code_recorder.get(mail) != None and code == code_recorder[
-	# 	mail]) or code == 'FireflyIsSoBeautiful' else ReturnCode.FAIL
+# return ReturnCode.SUCCESS if code != None and (code_recorder.get(mail) != None and code == code_recorder[
+# 	mail]) or code == 'FireflyIsSoBeautiful' else ReturnCode.FAIL

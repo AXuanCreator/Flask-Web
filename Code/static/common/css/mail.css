@@ -1,0 +1,225 @@
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box {
+    position: relative;
+    width: 440px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    z-index: 1;
+}
+
+/* 背板 */
+.box::before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 115px;
+    width: 50%;
+    height: 100%;
+    text-decoration: none;
+    background: #fff;
+    border-radius: 8px;
+    transform: skewX(15deg);
+    transition: 0.5s;
+}
+
+/* 背板阴影 */
+.box::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 115px;
+    width: 50%;
+    height: 100%;
+    background: #fff;
+    border-radius: 8px;
+    transform: skewX(15deg);
+    transition: 0.5s;
+    filter: blur(30px);
+}
+
+/* 鼠标悬停时，发生位移 | :hover表示鼠标悬停 */
+.box:hover:before,
+.box:hover:after {
+    transform: skewX(0deg) scaleX(1.3);
+}
+
+.box:before,
+.box:after {
+    background: linear-gradient(315deg, rgb(255, 225, 214), #ff4e00);
+    /*background: linear-gradient(315deg, rgb(255, 67, 0), #02ffff);*/
+}
+
+.box .content {
+    position: relative;
+    width: 380px;
+    height: 508px;
+    padding: 20px 40px;
+    background: rgba(66, 66, 66, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1;
+    transition: transform 0.5s;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box .content h1 {
+    font-size: 40px;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 90px;
+}
+
+.box .content label {
+    font-size: 20px;
+    color: #ffffff;
+    position: absolute;
+    top: 100px;
+    left: 20px;
+}
+
+/* 输入框 */
+.input {
+    color: #fff;
+    font-size: 0.9rem;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    border-bottom: var() solid var(); /* var()类似于auto */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-border {
+    position: absolute;
+    background: var();
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.input:focus {
+    outline: none;
+}
+
+.input:focus + .input-border {
+    width: 100%;
+}
+
+.form-control {
+    position: absolute;
+    --width-of-input: 300px;
+    top: 120px;
+    left: 85px;
+}
+
+.input-alt {
+    font-size: 2rem;
+    padding-inline: 1em;
+    padding-block: 0.8em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-border-alt {
+    height: 3px;
+    background: linear-gradient(90deg, #ff0900 0%, #ff6404 50%, #ffd7c6 100%);
+    transition: width 1s cubic-bezier(0.42, 0, 0.58, 1.00);
+}
+
+.input-alt:focus + .input-border-alt {
+    width: 70%;
+}
+
+
+/* 按钮 */
+button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+
+/* BUTTON 2 */
+.button_2 {
+    font-family: inherit;
+    font-size: 19px;
+    background: royalblue;
+    color: white;
+    padding: 0.5em 1em; /* 高度 右长度 */
+    padding-left: 6.5em; /* 左长度 */
+    background: linear-gradient(315deg, rgb(255, 59, 0), #ffa889);
+    backdrop-filter: blur(10px);
+
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.button_2 span {
+    display: block;
+    margin-left: 0.3em;
+    transition: all 0.3s ease-in-out;
+}
+
+.button_2 svg {
+    display: block;
+    transform-origin: center center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.button_2:hover .svg-wrapper {
+    animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.button_2:hover svg {
+    transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+.button_2:hover span {
+    transform: translateX(5em);
+}
+
+.button_2:active {
+    transform: scale(0.95);
+}
+
+@keyframes fly-1 {
+    from {
+        transform: translateY(0.1em);
+    }
+
+    to {
+        transform: translateY(-0.1em);
+    }
+}
