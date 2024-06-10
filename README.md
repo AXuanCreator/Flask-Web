@@ -33,11 +33,23 @@ Code目录下为Flask-Web本体，其余是演示项目及教程文档
 
 ## 预览
 
-此预览为 **Jinja** 分支内容
-
-<img src="./Docs/assets/alpha1.gif" alt="alpha1" style="zoom:50%;" />
+### Login
 
 </br>
+
+<img src="Docs/assets/Login.gif" alt="Login" style="zoom: 67%;" />
+
+</br>
+
+### Register
+
+<img src="Docs/assets/Register.gif" alt="Register" style="zoom:67%;" />
+
+</br>
+
+### Send Mail || Reset Password
+
+<img src="Docs/assets/image-20240610231141776.png" alt="image-20240610231141776" style="zoom: 50%;" />
 
 </br>
 
@@ -69,54 +81,6 @@ TODO：将会提供可执行文件
     ```cmd
     在编译器中配置运行脚本，工作目录选择Code文件夹
     ```
-
-    
-
-    
-
-
-
-
-
-## 项目文件结构(即将废弃)
-
-Flask-Web
-
-——Code **Flask-Web主要代码**
-
-——Demo **例子**
-
-————Demo_1 **Debug模式、Host | Port修改**
-
-————Demo_2 **URL与视图函数**
-
-————Demo_3 **Flask与数据库的连接 | ORM模型**
-
-————Demo_4 **ORM模型外键与表的关系**
-
-————Demo_5 **更好的ORM模型映射表的方法**
-
-————Demo_6 **使用蓝图管理URL**
-
-————Flask-Server **使用Flask框架写的组件**
-
-————————AdminLogin **管理员登陆操作组件**
-
-</br>
-
-——Docs **文档**
-
-————QA.md **项目出现报错时可以到这个文件 Ctrl + F 搜索一下**
-
-————Demo解析.md **Demo的例子解析，认真阅读即可熟悉Flask框架**(即将废弃)
-
-————扩展信息.md **杂项**
-
-
-
-
-
-
 
 
 
