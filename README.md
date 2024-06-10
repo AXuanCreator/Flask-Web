@@ -37,13 +37,13 @@ Code目录下为Flask-Web本体，其余是演示项目及教程文档
 
 </br>
 
-<img src="Docs/assets/Login.gif" alt="Login" style="zoom: 33%;" />
+<img src="Docs/assets/Login.gif" alt="Login" style="zoom: 67%;" />
 
 </br>
 
 ### Register
 
-<img src="Docs/assets/Register.gif" alt="Register" style="zoom: 33%;" />
+<img src="Docs/assets/Register.gif" alt="Register" style="zoom:67%;" />
 
 </br>
 
