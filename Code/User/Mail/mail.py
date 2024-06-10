@@ -20,7 +20,6 @@ class SendMail:
 		:return:
 		"""
 		message = Message('Your Code', recipients=[recipient])
-		# message.body = code_recorder[recipient]
 
 		message.html = render_template('mail-code.html', CODE=code_recorder[recipient])
 
@@ -31,22 +30,22 @@ class SendMail:
 			mail.send(message)
 			return True
 		except Exception as e:
-			print('\033[36m[ERROR]\033[0m | SendMail : ', str(e))
+			print('\033[36m[ERROR]\033[0m | Mail | SendMail : ', str(e))
 			return False
 
 	@staticmethod
 	def generate_random_code(mail):
 		# 从MAIL_CODE中获取长度为MAIL_CODE_LEN的验证码
 		code = ''.join(random.choices(UserConfig.MAIL_CODE, k=UserConfig.MAIL_CODE_LEN))
-		print('\033[35m[DEBUG]\033[0m | Generate Code : ', code)
+		print('\033[35m[DEBUG]\033[0m | Mail | Generate Code : ', code)
 
 		code_recorder[mail] = code
-		print('\033[35m[DEBUG]\033[0m | Code Recorder : ', code_recorder)
+		print('\033[35m[DEBUG]\033[0m | Mail | Code Recorder : ', code_recorder)
 
 	@staticmethod
 	def remove_code(mail):
-		print('\033[35m[DEBUG]\033[0m | Remove Code Task Start')
+		print('\033[35m[DEBUG]\033[0m | Mail | Remove Code Task Start')
 		try:
 			del code_recorder[mail]
 		except Exception as e:
-			print('\033[36m[ERROR]\033[0m | Remove Code Fail')
+			print('\033[36m[ERROR]\033[0m | Mail | Remove Code Fail')
