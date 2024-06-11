@@ -1,11 +1,9 @@
 version = 1
 
+test_patterns = ["/Code/**"]
+
 [[analyzers]]
 name = "python"
 
-[analyzers.meta]
-runtime_version = "3.x.x"
-
-include_patterns = [
-  "Code/**/*.py"
-]
+  [analyzers.meta]
+  runtime_version = "3.x.x"
