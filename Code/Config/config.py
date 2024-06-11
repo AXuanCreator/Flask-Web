@@ -19,7 +19,7 @@ class AppConfig():
 
 	# FLASK
 	DEBUG = True
-	PERMANENT_SESSION_LIFETIME = datetime.timedelta(seconds=600)  # 10min后Session过期
+	PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7)  # 7天后Session过期
 
 	# MAIL
 	MAIL_SERVER = 'smtp.sinpor.top'
