@@ -4,7 +4,6 @@ import User
 from Config import ReturnCode, User, UserConfig, db
 from Utils import Response, ResponseCode, Helper
 from .user_services import UserServices
-from .Mail import SendMail
 
 user_bp = Blueprint('user', __name__)
 
@@ -23,12 +22,16 @@ def user_login_interceptor():
 
 @user_bp.route('/test')
 def test():
-	return render_template('reset-password.html')
+	return render_template('info.html')
 
 
 @user_bp.route('/login', methods=['GET', 'POST'])
 def user_login():
 	if request.method == 'GET':
+		if session.get('user_login'):
+			return redirect(url_for('user.user_info', id=User.query.filter_by(username=session[
+				'user_login']).first().id))
+
 		return render_template('login.html')
 
 	elif request.method == 'POST':
@@ -39,16 +42,18 @@ def user_login():
 
 		print('\033[35m[DEBUG]\033[0m | Login | Session : ', session)
 
-		if session.get('user_login'):
-			return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)
-
 		# 仅在Python>=3.10可用match case
 		match UserServices.login(username, password):
 			case ReturnCode.SUCCESS:
-				if remember_me is not None:
+				if remember_me is not None:  # TODO:需要和拦截器分开，如时间更长
 					session['user_login'] = username
 					session.permanent = True  # 启用Config的Session清空时间
-				return Response.response(ResponseCode.LOGIN_SUCCESS, 'Login Success', User.query.filter_by(username=username).first().id)  # TODO:加入Session
+				else:
+					session['user_login'] = username
+					session.permanent = False
+
+				return redirect(url_for('user.user_info', id=User.query.filter_by(username=username).first().id))
+
 			case ReturnCode.USER_NOT_EXIST:
 				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
 			case ReturnCode.PASSWORD_NOT_ALLOWED:
@@ -59,15 +64,19 @@ def user_login():
 
 @user_bp.route('/register', methods=['GET', 'POST'])
 def user_register():
-	# POST请求分为两种
+	# GET请求分为两种
 	# 1.查询session是否存储着用户信息，若有，则直接载入到数据库并清空Session内容，然后返回至Login
 	# 2.若无，则显示Register的页面信息
 	if request.method == 'GET':
 		if session.get('register') is not None and session['register']:
 			match UserServices.register(session, commit=True):
 				case ReturnCode.SUCCESS:
-					print('\033[35m[DEBUG]\033[0m | Register GET | Session Clear')
-					session.clear()  # 清空注册信息
+					# 清空Session中的注册信息
+					register_keys = ['username', 'name', 'gender', 'phone', 'mail', 'password', 'register']
+					for key in register_keys:
+						del session[key]
+					print('\033[35m[DEBUG]\033[0m | Register GET | Session Clear : ', session)
+
 					return redirect(url_for('user.user_login'))
 
 				case ReturnCode.USERNAME_NOT_ALLOWED:
@@ -106,16 +115,23 @@ def user_register():
 		return redirect(url_for('user.user_send_code'))  # GET请求，因为从Session中获取信息
 
 
-
-@user_bp.route('/<id>/deregister', methods=['DELETE'])
+@user_bp.route('/<id>/deregister', methods=['GET'])
 def user_deregister(id):
-	assert request.method == 'DELETE'
+	if request.method == 'GET':
+		# 若已通过验证码验证
+		if session.get('deregister') is not None and session['deregister'] == id:
+			del session['deregister']
+			del session['mail']
+			match UserServices.deregister(id):
+				case ReturnCode.SUCCESS:
+					return redirect(url_for('user.user_login'))
+				case ReturnCode.USER_NOT_EXIST:
+					return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
-	match UserServices.deregister(id):
-		case ReturnCode.SUCCESS:
-			return Response.response(ResponseCode.SUCCESS, 'Deregister Success', id)
-		case ReturnCode.USER_NOT_EXIST:
-			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+		session['mail'] = User.query.get(id).mail
+		session['deregister'] = id
+
+		return redirect(url_for('user.user_send_code'))
 
 
 @user_bp.route('/send-code', methods=['GET', 'POST'])
@@ -156,17 +172,20 @@ def user_verify_code(mail):
 			case ReturnCode.SUCCESS:
 				print('\033[35m[DEBUG]\033[0m | Verify Code POST | Session : ', session)
 
-				session['user_login'] = mail  # 验证状态——通过
-				session.permanent = True  # 启用Config的Session清空时间
+				session['user_login'] = User.query.filter_by(mail=mail).first().username  # 验证状态——通过
 
 				# 当Session存有Register信息时，则代表此时为注册状态
 				# 若无，则代表此时在重置密码阶段
 				# 注意，这种写法较为暴力，但在验证码使用场景较少时简单有效
 				if session.get('register') is not None and session.get('register'):
 					return redirect(url_for('user.user_register'))
+
+				elif session.get('deregister') is not None and session.get('deregister'):
+					return redirect(url_for('user.user_deregister', id=session['deregister']))
+
 				else:
-					return redirect(url_for('user.user_change_password',  id=User.query.filter_by(mail=mail).first().id))
-				# return ReturnCode.
+					return redirect(url_for('user.user_change_password', id=User.query.filter_by(mail=mail).first().id))
+			# return ReturnCode.
 			# return Response.response(ResponseCode.SUCCESS, 'Check Code Success', User.query.filter_by(mail=mail).first().id)
 			case ReturnCode.FAIL:
 				return Response.response(ResponseCode.FAILED, 'Check Code Fail', None)
@@ -188,7 +207,7 @@ def user_change_password(id):
 			return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Not Same', None)
 
 		match UserServices.change_password(id, user_request.get('password')):
-			case ReturnCode.SUCCESS:    # TODO:实际上并没有对密码是否和原先的密码重复做判断
+			case ReturnCode.SUCCESS:  # TODO:实际上并没有对密码是否和原先的密码重复做判断
 				print('\033[35m[DEBUG]\033[0m | Reset Password | Success : ', id)
 				return redirect(url_for('user.user_login'))
 			case ReturnCode.USER_NOT_EXIST:
@@ -199,20 +218,27 @@ def user_change_password(id):
 				return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
 
 
-@user_bp.route('/<id>', methods=['GET', 'PUT'])
+@user_bp.route('/<id>', methods=['GET', 'POST'])
 def user_info(id):
 	if request.method == 'GET':
 		db_user = User.query.get(id)
 		if db_user is None:
 			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
-		return Response.response(ResponseCode.SUCCESS, 'Get Info Success', Helper.to_dict(db_user))
+		return render_template('info.html',
+		                       id=db_user.id,
+		                       username=db_user.username,
+		                       name=db_user.name,
+		                       phone=db_user.phone,
+		                       mail=db_user.mail,
+		                       gender=db_user.gender)
 
-	elif request.method == 'PUT':
-		user_request = request.get_json()
+	elif request.method == 'POST':
+		user_request = request.form
+		print(user_request)
 		match UserServices.update_user(id, user_request):
 			case ReturnCode.SUCCESS:
-				return Response.response(ResponseCode.SUCCESS, 'Update Info Success', id)
+				return redirect(url_for("user.user_info", id=id))
 			case ReturnCode.USER_NOT_EXIST:
 				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 			case ReturnCode.USERNAME_NOT_ALLOWED:
@@ -225,3 +251,24 @@ def user_info(id):
 				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
 			case ReturnCode.MAIL_REPEATED:
 				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
+
+
+@user_bp.route('/redirect/login', methods=['GET'])
+def redirect_login():
+	del session['user_login']
+	return redirect(url_for('user.user_login'))
+
+
+@user_bp.route('/<id>/update/info', methods=['GET'])
+def update_info(id):
+	db_user = User.query.get(id)
+	if db_user is None:
+		return "THIS IS TEST"
+
+	return render_template('update.html',
+	                       id=id,
+	                       username=db_user.username,
+	                       name=db_user.name,
+	                       phone=db_user.phone,
+	                       mail=db_user.mail,
+	                       gender=db_user.gender)

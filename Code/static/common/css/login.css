@@ -365,7 +365,7 @@ ul {
 
 /* Forget Password */
 .tooltip-container {
-    --background: #00cef1;
+    --background: #008eff;
     --color: #e8e8e8;
     position: relative;
     cursor: pointer;

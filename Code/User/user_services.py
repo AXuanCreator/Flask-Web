@@ -43,7 +43,7 @@ class UserDao:
 
 		# 使用列表推导式赋值
 		request_keys = ['username', 'name', 'password', 'gender', 'phone', 'mail']
-		username, password, name, gender, phone, mail = (user_request.get(key) for key in request_keys)
+		username, name, password, gender, phone, mail = (user_request.get(key) for key in request_keys)
 
 		# 检测
 		if username is not None:
