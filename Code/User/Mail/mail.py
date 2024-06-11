@@ -9,43 +9,45 @@ code_recorder = {}
 
 
 class SendMail:
-	@staticmethod
-	def send_mail(recipient, body=None, html_body=None):
-		"""
-		邮件发送
-		:param subject: 邮件主题
-		:param recipient: 收件人邮箱
-		:param body: 正文内容,默认为None
-		:param html_body：以HTML形式发送，默认为None
-		:return:
-		"""
-		message = Message('Your Code', recipients=[recipient])
+    @staticmethod
+    def send_mail(recipient, body=None, html_body=None):
+        """
+        邮件发送
+        :param subject: 邮件主题
+        :param recipient: 收件人邮箱
+        :param body: 正文内容,默认为None
+        :param html_body：以HTML形式发送，默认为None
+        :return:
+        """
+        message = Message('Your Code', recipients=[recipient])
 
-		message.html = render_template('mail-code.html', CODE=code_recorder[recipient])
+        message.html = render_template(
+            'mail-code.html', CODE=code_recorder[recipient])
 
-		if html_body:
-			message.html = html_body
+        if html_body:
+            message.html = html_body
 
-		try:
-			mail.send(message)
-			return True
-		except Exception as e:
-			print('\033[36m[ERROR]\033[0m | Mail | SendMail : ', str(e))
-			return False
+        try:
+            mail.send(message)
+            return True
+        except Exception as e:
+            print('\033[36m[ERROR]\033[0m | Mail | SendMail : ', str(e))
+            return False
 
-	@staticmethod
-	def generate_random_code(mail):
-		# 从MAIL_CODE中获取长度为MAIL_CODE_LEN的验证码
-		code = ''.join(random.choices(UserConfig.MAIL_CODE, k=UserConfig.MAIL_CODE_LEN))
-		print('\033[35m[DEBUG]\033[0m | Mail | Generate Code : ', code)
+    @staticmethod
+    def generate_random_code(mail):
+        # 从MAIL_CODE中获取长度为MAIL_CODE_LEN的验证码
+        code = ''.join(random.choices(
+            UserConfig.MAIL_CODE, k=UserConfig.MAIL_CODE_LEN))
+        print('\033[35m[DEBUG]\033[0m | Mail | Generate Code : ', code)
 
-		code_recorder[mail] = code
-		print('\033[35m[DEBUG]\033[0m | Mail | Code Recorder : ', code_recorder)
+        code_recorder[mail] = code
+        print('\033[35m[DEBUG]\033[0m | Mail | Code Recorder : ', code_recorder)
 
-	@staticmethod
-	def remove_code(mail):
-		print('\033[35m[DEBUG]\033[0m | Mail | Remove Code Task Start')
-		try:
-			del code_recorder[mail]
-		except Exception as e:
-			print('\033[36m[ERROR]\033[0m | Mail | Remove Code Fail')
+    @staticmethod
+    def remove_code(mail):
+        print('\033[35m[DEBUG]\033[0m | Mail | Remove Code Task Start')
+        try:
+            del code_recorder[mail]
+        except Exception as e:
+            print('\033[36m[ERROR]\033[0m | Mail | Remove Code Fail')

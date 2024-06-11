@@ -13,7 +13,8 @@ class BorrowService:
         book_id = args.get('book_id')
         category_id = args.get('category_id')
         contain_finished = int(args.get('contain_finished'))
-        conditions = ['user_id', 'book_id', 'category_id', 'contain_finished', 'id']
+        conditions = ['user_id', 'book_id',
+                      'category_id', 'contain_finished', 'id']
         res = db.session.query(Borrow).join(Book)
         if user_id != '':
             res = res.filter(Borrow.user_id == int(user_id))
@@ -40,7 +41,8 @@ class BorrowService:
             return -2
         if not user:
             return -1
-        user_borrows_query = Borrow.query.filter_by(user_id=user_id).filter(Borrow.really_return_date.is_(None))
+        user_borrows_query = Borrow.query.filter_by(
+            user_id=user_id).filter(Borrow.really_return_date.is_(None))
         if len(user_borrows_query.all()) >= user.max_borrow_books:
             return 0
         # 查询是否有未归还的重复图书
@@ -48,8 +50,10 @@ class BorrowService:
         if len(user_borrows_query.all()) > 0:
             return -3
         borrow_date = datetime.datetime.now()
-        return_date = borrow_date + datetime.timedelta(days=user.max_borrow_days)
-        new_borrow = Borrow(user_id=user_id, book_id=book_id, borrow_date=borrow_date, return_date=return_date)
+        return_date = borrow_date + \
+            datetime.timedelta(days=user.max_borrow_days)
+        new_borrow = Borrow(user_id=user_id, book_id=book_id,
+                            borrow_date=borrow_date, return_date=return_date)
         db.session.add(new_borrow)
         db.session.commit()
         return new_borrow.id
@@ -85,5 +89,6 @@ class BorrowService:
         if datetime.datetime.now() > borrow.return_date:
             borrow.really_return_date = datetime.datetime.now()
             return 0
-        borrow.return_date = datetime.datetime.now() + datetime.timedelta(days=user.max_borrow_days)
+        borrow.return_date = datetime.datetime.now(
+        ) + datetime.timedelta(days=user.max_borrow_days)
         return 1

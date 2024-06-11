@@ -21,7 +21,8 @@ class BookCategoryServices:
         total = categories_query.count()
 
         # 获取该分页的内容
-        categories = categories_query.offset((page - 1) * per_page).limit(per_page).all()
+        categories = categories_query.offset(
+            (page - 1) * per_page).limit(per_page).all()
         return categories, total
 
     @staticmethod

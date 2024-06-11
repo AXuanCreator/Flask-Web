@@ -7,6 +7,8 @@ app = Flask(__name__)
 # 创建路由和视图函数映射
 # @app.rout('/')表示根路由
 # 当用户访问 http://127.0.0.1:5000/ 时，会执行hello_world函数
+
+
 @app.route('/')
 def hello_world():  # put application's code here
     return '流萤小姐美貌盖世无双'

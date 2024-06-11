@@ -14,9 +14,10 @@ app.config['MAIL_DEFAULT_SENDER'] = ('Coder', 'eigb903@sinpor.top')  # 默认发
 
 mail = Mail(app)
 
+
 @app.route('/')
 def index():
-	return render_template_string('''
+    return render_template_string('''
         <form action="/send-mail" method="POST">
             <input type="email" name="email" placeholder="Recipient Email">
             <input type="text" name="subject" placeholder="Subject">
@@ -25,15 +26,17 @@ def index():
         </form>
     ''')
 
+
 @app.route('/send-mail', methods=['POST'])
 def send_mail():
-	email = request.form['email']
-	subject = request.form['subject']
-	body = request.form['body']
+    email = request.form['email']
+    subject = request.form['subject']
+    body = request.form['body']
 
-	msg = Message(subject, recipients=[email], body=body)
-	mail.send(msg)
-	return 'Mail sent!'
+    msg = Message(subject, recipients=[email], body=body)
+    mail.send(msg)
+    return 'Mail sent!'
+
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)

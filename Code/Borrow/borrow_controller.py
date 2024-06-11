@@ -5,10 +5,12 @@ from Borrow.borrow_services import BorrowService
 
 borrow_bp = Blueprint('borrow', __name__)
 
+
 @borrow_bp.route('', methods=['GET'])
 def query_borrow():
     res = BorrowService.list_borrow(request.args)
     return Response.response(ResponseCode.SUCCESS, '查询成功', [Helper.to_dict(e) for e in res])
+
 
 @borrow_bp.route('', methods=['POST'])
 def add_borrow():
@@ -24,6 +26,7 @@ def add_borrow():
     if res_code > 0:
         return Response.response(ResponseCode.SUCCESS, '借阅成功', res_code)
 
+
 @borrow_bp.route('/<id>/return', methods=['PUT'])
 def return_book(id):
     res_code = BorrowService.return_book(id)
@@ -35,6 +38,7 @@ def return_book(id):
         return Response.response(ResponseCode.RETURN_OVERDUE, '逾期归还', 0)
     if res_code == 1:
         return Response.response(ResponseCode.SUCCESS, '归还成功', id)
+
 
 @borrow_bp.route('/<id>/renew', methods=['PUT'])
 def renew_book(id):

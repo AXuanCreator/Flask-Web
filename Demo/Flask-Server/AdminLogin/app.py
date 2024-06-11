@@ -13,26 +13,28 @@ from models import db
 from config import Config
 
 from user_controllers import user_bp
+
+
 def create_app():
-	# 创建Flask应用实例
-	app = Flask(__name__)
-	CORS(app)
+    # 创建Flask应用实例
+    app = Flask(__name__)
+    CORS(app)
 
-	app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
-	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
-	app.config['SECRET_KEY'] = Config.SECRET_KEY
+    app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
+    app.config['SECRET_KEY'] = Config.SECRET_KEY
 
-	app.register_blueprint(user_bp)
+    app.register_blueprint(user_bp)
 
-	# 初始化数据库
-	db.init_app(app)
+    # 初始化数据库
+    db.init_app(app)
 
-	with app.app_context():
-		db.create_all()
+    with app.app_context():
+        db.create_all()
 
-	return app
+    return app
 
 
 if __name__ == '__main__':
-	app = create_app()
-	app.run(debug=True)
+    app = create_app()
+    app.run(debug=True)

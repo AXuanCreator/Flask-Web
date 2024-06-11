@@ -2,8 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-## 设置app.config中关于数据库的参数
-## SQLAlchemy(app)会自动从app.config中读取数据库的配置
+# 设置app.config中关于数据库的参数
+# SQLAlchemy(app)会自动从app.config中读取数据库的配置
 # MySQL所在的主机名
 HOSTNAME = '127.0.0.1'
 # MySQL的监听端口号，默认3306
@@ -30,15 +30,18 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # 表：作者
+
+
 class Author(db.Model):
-	__tablename__ = 'author'
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	name = db.Column(db.String(80), nullable=False)
-	age = db.Column(db.Integer, nullable=False)
+    __tablename__ = 'author'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+
 
 with app.app_context():
-	db.create_all()
+    db.create_all()
 
 
 if __name__ == '__main__':
-	app.run()
+    app.run()

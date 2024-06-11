@@ -8,7 +8,6 @@ from .network import RecommendNet
 from Config import TrainConfig, BookRating, Borrow
 
 
-
 class RecommendDataset(Dataset):
     def __init__(self, data):
         self.borrow_ids = data['borrow_book_list'].values
@@ -27,6 +26,7 @@ class RecommendDataset(Dataset):
             rating = self.rating[item]
 
         return torch.tensor(borrow_id, dtype=torch.float), torch.tensor(book_id, dtype=torch.float), torch.tensor(rating, dtype=torch.float)
+
 
 def create_app():
     from Code.app import create_app
@@ -87,11 +87,12 @@ def train():
 
             epoch_loss += loss.item()
 
-
-        print(f'\033[35m[DEBUG]\033[0m | TRAIN : {epoch + 1} | LOSS : {epoch_loss}')
+        print(
+            f'\033[35m[DEBUG]\033[0m | TRAIN : {epoch + 1} | LOSS : {epoch_loss}')
 
         if (epoch + 1) % 5 == 0:
-            torch.save(model.state_dict(), f'./Recommend/checkpoints/model_epoch_{epoch + 1}.pth')
+            torch.save(model.state_dict(),
+                       f'./Recommend/checkpoints/model_epoch_{epoch + 1}.pth')
 
 
 if __name__ == '__main__':
