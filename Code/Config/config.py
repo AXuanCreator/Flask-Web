@@ -14,7 +14,7 @@ class AppConfig():
 	DATABASE = 'flask-web'  # 架构名
 
 	SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
-	SQLALCHEMY_TRACK_MODIFICATIONS = False
+	SQLALCHEMY_TRACKr_MODIFICATIONS = False
 	SECRET_KEY = 'your_secret_key'
 
 	# FLASK

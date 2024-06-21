@@ -27,10 +27,12 @@ def test():
 
 @user_bp.route('/login', methods=['GET', 'POST'])
 def user_login():
+	print(session.get('user_login'))
 	if request.method == 'GET':
 		if session.get('user_login'):
-			return redirect(url_for('user.user_info', id=User.query.filter_by(username=session[
-				'user_login']).first().id))
+			db_user = User.query.filter_by(username=session['user_login']).first()
+			if db_user is not None:
+				return redirect(url_for('user.user_info', id=db_user.id))
 
 		return render_template('login.html')
 
@@ -122,6 +124,9 @@ def user_deregister(id):
 		if session.get('deregister') is not None and session['deregister'] == id:
 			del session['deregister']
 			del session['mail']
+			if session.get('user_login'):
+				del session['user_login']
+
 			match UserServices.deregister(id):
 				case ReturnCode.SUCCESS:
 					return redirect(url_for('user.user_login'))
