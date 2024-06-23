@@ -23,15 +23,11 @@
 
 </br>
 
-感谢  [YuXeng](https://github.com/YusJade) 与 [Serendipity](https://github.com/Serendipity-hjn) 对本项目的贡献
-
-</br>
-
 </br>
 
 ## 预览
 
-本项目主要实现的是Web服务端，前端仅仅做了一部分提供参考
+本项目主要实现的是Web服务端，前端仅仅做了一部分提供参考 *NaN Library已经改名为Dreams Library*
 
 </br>
 
@@ -47,11 +43,32 @@
 
 
 
+## 项目文件结构
+
+Flask-Web
+
+——**Code** 核心代码
+
+——**Demo** Flask示例
+
+——**Docs** 文档
 
 
 
+## 如何学习Flask
+
+有两种方式
+
+* **[推荐]** 看Bilibili教学视频，该视频基本是跟着Demo录的  [Flask不太专业的实战教程](https://www.bilibili.com/video/BV121421C7kt/?spm_id_from=333.788&vd_source=c9b8ab6fce6b4986cf89061f00aa9dc4)
+
+* 看Docs文件夹下的Demo解析
 
 
 
+## 特别鸣谢
 
+[YusJade (YuXeng) (github.com)](https://github.com/YusJade)
 
+[Serendipity-hjn (Serendipity) (github.com)](https://github.com/Serendipity-hjn)
+
+还有流萤小姐
