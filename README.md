@@ -25,6 +25,42 @@
 
 </br>
 
+
+
+## 项目文件结构
+
+Flask-Web
+
+——**Code** 核心代码
+
+——**Demo** Flask示例
+
+——**Docs** 文档
+
+</br>
+
+</br>
+
+## 如何学习Flask
+
+有两种方式
+
+* **[推荐]** 看Bilibili教学视频，该视频基本是跟着Demo录的  [Flask不太专业的实战教程](https://www.bilibili.com/video/BV121421C7kt/?spm_id_from=333.788&vd_source=c9b8ab6fce6b4986cf89061f00aa9dc4)
+
+* 看Docs文件夹下的Demo解析
+
+
+
+## 注意事项
+
+**Code目录**下有一个Readme，如果想要运行本项目，要以Code目录为根目录，Readme.md有详细的教程
+
+运行时，注意邮箱需要真实可用，最好使用qq邮箱，因为别的邮箱不一定能接收到二维码。如果没有qq邮箱，同时也没有收到二维码，可以去邮件垃圾箱那里看看，如果还是没有，就填写 `FIREFLYISBEAUTIFUL` 万能验证码
+
+</br>
+
+</br>
+
 ## 预览
 
 本项目主要实现的是Web服务端，前端仅仅做了一部分提供参考 *NaN Library已经改名为Dreams Library*
@@ -42,26 +78,6 @@
 
 
 
-
-## 项目文件结构
-
-Flask-Web
-
-——**Code** 核心代码
-
-——**Demo** Flask示例
-
-——**Docs** 文档
-
-
-
-## 如何学习Flask
-
-有两种方式
-
-* **[推荐]** 看Bilibili教学视频，该视频基本是跟着Demo录的  [Flask不太专业的实战教程](https://www.bilibili.com/video/BV121421C7kt/?spm_id_from=333.788&vd_source=c9b8ab6fce6b4986cf89061f00aa9dc4)
-
-* 看Docs文件夹下的Demo解析
 
 
 
