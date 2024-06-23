@@ -1,6 +1,6 @@
 from math import ceil
 
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from Config import ReturnCode, BookCategory
 from Utils import Response, ResponseCode, Helper
 from .bookcategory_services import BookCategoryServices
@@ -19,7 +19,7 @@ def book_category_info():
 			case ReturnCode.SUCCESS:
 				return Response.response(ResponseCode.SUCCESS, '类别添加成功', BookCategory.query.filter_by(name=name).first().id)
 			case ReturnCode.CATEGORY_EXIST:
-				return Response.response(ResponseCode.CATEGORY_EXIST, '类别名字重复,添加失败', BookCategory.query.filter_by(name=name).first().id)
+				return render_template('error.html',output='类别名字重复，添加失败')
 
 	elif request.method == 'GET':
 		# 分页获取类别
@@ -27,7 +27,7 @@ def book_category_info():
 			page = int(request.args.get('page', 1))  # 页码
 			per_page = int(request.args.get('per_page', 10))  # 每页书数
 		except ValueError:
-			return Response.response(ResponseCode.FAILED, '参数错误', None)
+			return render_template('error.html',output='参数错误')
 
 		categories, total = BookCategoryServices.list_book_categories(page, per_page)
 
@@ -47,7 +47,7 @@ def book_category_info():
 			}
 			return Response.response(ResponseCode.SUCCESS, '获取全部图书类别', response_data)
 		else:
-			return Response.response(ResponseCode.CATEGORY_NOT_EXIST, '图书类别为空', None)
+			return render_template('error.html',output='图书类别为空')
 
 
 @bookcategory_bp.route('/<id>', methods=['PUT', 'DELETE'])
@@ -60,7 +60,7 @@ def book_category_change(id):
 			case ReturnCode.SUCCESS:
 				return Response.response(ResponseCode.SUCCESS, '书籍类别更新成功', Helper.to_dict(BookCategory.query.filter_by(name=new_name).first()))
 			case ReturnCode.FAIL:
-				return Response.response(ResponseCode.FAILED, '书籍类别不存在或更改信息有误(重复)', None)
+				return render_template('error.html',output='书籍类别不存在或更新有误')
 
 	elif request.method == 'DELETE':
 		# 删除分类
@@ -68,4 +68,4 @@ def book_category_change(id):
 			case ReturnCode.SUCCESS:
 				return Response.response(ResponseCode.SUCCESS, '书籍类别删除成功', id)
 			case ReturnCode.CATEGORY_NOT_EXIST:
-				return Response.response(ResponseCode.CATEGORY_NOT_EXIST, '书籍类别不存在，删除失败', None)
+				return render_template('error.html',output='书籍类别不存在')

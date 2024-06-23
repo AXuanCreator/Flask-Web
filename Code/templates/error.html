@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link href="{{ url_for('static', filename='common/css/error.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="htmlpage-row">
+    <div class="htmlpage-cell" id="ir1i">
+        <span id="ihdt9">
+            <br>Opps!似乎出现了些问题</br>
+            <span style="font-size: 50px; background: linear-gradient(to right, #ff5241, #ffd7be);">{{ output }}</span>
+        </span>
+
+        <img src="{{ url_for('static', filename='common/images/upscaled_image.png') }}" class="c2199"/>
+    </div>
+</div>
+</body>
+</html>

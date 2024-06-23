@@ -1,8 +1,8 @@
-from flask import Flask, Blueprint, request, session, redirect, url_for, render_template
+from flask import Blueprint, request, session, redirect, url_for, render_template
 
 import User
-from Config import ReturnCode, User, UserConfig, db
-from Utils import Response, ResponseCode, Helper
+from Config import ReturnCode, User, UserConfig
+from Utils import Response, ResponseCode
 from .user_services import UserServices
 
 user_bp = Blueprint('user', __name__)
@@ -22,7 +22,7 @@ def user_login_interceptor():
 
 @user_bp.route('/test')
 def test():
-	return render_template('info.html')
+	return render_template('error.html', output='Username格式错误')
 
 
 @user_bp.route('/login', methods=['GET', 'POST'])
@@ -34,7 +34,7 @@ def user_login():
 			if db_user is not None:
 				return redirect(url_for('user.user_info', id=db_user.id))
 
-		return render_template('login.html')
+		return render_template('user/login.html')
 
 	elif request.method == 'POST':
 		user_request = request.form
@@ -57,9 +57,9 @@ def user_login():
 				return redirect(url_for('user.user_info', id=User.query.filter_by(username=username).first().id))
 
 			case ReturnCode.USER_NOT_EXIST:
-				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Username Wrong', None)
+				return render_template('error.html', output='该名称不存在用户')
 			case ReturnCode.PASSWORD_NOT_ALLOWED:
-				return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Wrong', None)
+				return render_template('error.html', output='密码错误')
 			case _:
 				print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
 
@@ -82,21 +82,21 @@ def user_register():
 					return redirect(url_for('user.user_login'))
 
 				case ReturnCode.USERNAME_NOT_ALLOWED:
-					return Response.response(ResponseCode.BAD_REQUEST, 'Username Format Wrong', None)
+					return render_template('error.html', output='Username格式错误')
 				case ReturnCode.USERNAME_REPEATED:
-					return Response.response(ResponseCode.USERNAME_REPEATED, 'Username Has Been Registered', None)
+					return render_template('error.html', output='Username重复')
 				case ReturnCode.PASSWORD_NOT_ALLOWED:
-					return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
+					return render_template('error.html', output='Password格式错误')
 				case ReturnCode.MAIL_NOT_ALLOWED:
-					return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
+					return render_template('error.html', output='Email格式错误')
 				case ReturnCode.MAIL_REPEATED:
-					return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
+					return render_template('error.html', output='Email重复')
 				case ReturnCode.INFO_NOT_ALLOWED:
-					return Response.response(ResponseCode.BAD_REQUEST, 'Enter All Information', None)
+					return render_template('error.html', output='输入信息不完整')
 				case _:
-					print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
+					print('\033[34m[WARN]\033[0m | Controller-->Register | Unexpected Output')
 		else:
-			return render_template('register.html')
+			return render_template('user/register.html')
 
 
 	# POST请求则用于将Register的页面信息存入Session里
@@ -106,10 +106,10 @@ def user_register():
 		# 对Session进行赋值操作
 		user_request = request.form
 		if user_request['password'] != user_request['repassword']:
-			return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Not Same', None)
+			return render_template('error.html', output='输入的密码不相同')
 		for key in user_request.keys():
 			if user_request[key] == '':
-				return Response.response(ResponseCode.BAD_REQUEST, 'Enter All Information', None)
+				return render_template('error.html', output='输入信息不完整')
 			session[key] = user_request[key]
 		session['register'] = True  # 启用注册状态
 
@@ -131,7 +131,7 @@ def user_deregister(id):
 				case ReturnCode.SUCCESS:
 					return redirect(url_for('user.user_login'))
 				case ReturnCode.USER_NOT_EXIST:
-					return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+					return render_template('error.html', output='无法查询到用户')
 
 		session['mail'] = User.query.get(id).mail
 		session['deregister'] = id
@@ -150,11 +150,11 @@ def user_send_code():
 				case ReturnCode.SUCCESS:
 					return redirect(url_for('user.user_verify_code', mail=session['mail']))  # 由于该URL带有参数，需要显式传入
 				case ReturnCode.FAIL:
-					return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+					return render_template('error.html', output='验证码错误')
 				case ReturnCode.MAIL_NOT_ALLOWED:
-					return Response.response(ResponseCode.FAILED, 'Mail Wrong', None)
+					return render_template('error.html', output='邮箱错误')
 		else:
-			return render_template('reset-password-mail.html')
+			return render_template('user/reset-password-mail.html')
 
 	elif request.method == 'POST':
 		mail = request.form.get('mail')
@@ -162,22 +162,20 @@ def user_send_code():
 			case ReturnCode.SUCCESS:
 				return redirect(url_for('user.user_verify_code', mail=mail))  # 由于该URL带有参数，需要显式传入
 			case ReturnCode.FAIL:
-				return Response.response(ResponseCode.FAILED, 'Send Mail FAIL', None)
+				return render_template('error.html', output='发送邮件失败')
 			case ReturnCode.MAIL_NOT_ALLOWED:
-				return Response.response(ResponseCode.FAILED, 'Mail Wrong', None)
+				return render_template('error.html', output='邮箱错误')
 
 
 @user_bp.route('/<mail>/code', methods=['GET', 'POST'])
 def user_verify_code(mail):
 	if request.method == 'GET':
-		return render_template('check-code.html')
+		return render_template('user/check-code.html')
 
 	elif request.method == 'POST':
 		match UserServices.check_code(mail, request.form.get('code'), need_user_check=False):
 			case ReturnCode.SUCCESS:
 				print('\033[35m[DEBUG]\033[0m | Verify Code POST | Session : ', session)
-
-				session['user_login'] = User.query.filter_by(mail=mail).first().username  # 验证状态——通过
 
 				# 当Session存有Register信息时，则代表此时为注册状态
 				# 若无，则代表此时在重置密码阶段
@@ -193,34 +191,34 @@ def user_verify_code(mail):
 			# return ReturnCode.
 			# return Response.response(ResponseCode.SUCCESS, 'Check Code Success', User.query.filter_by(mail=mail).first().id)
 			case ReturnCode.FAIL:
-				return Response.response(ResponseCode.FAILED, 'Check Code Fail', None)
+				return render_template('error.html', output='验证码错误')
 			case ReturnCode.MAIL_NOT_ALLOWED:
-				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Mail Wrong', None)
+				return render_template('error.html', output='邮箱错误')
 
 
 @user_bp.route('/<id>/password', methods=['GET', 'POST'])
 def user_change_password(id):
 	# 该视图函数需要验证状态
 	if request.method == 'GET':
-		return render_template('reset-password.html')
+		return render_template('user/reset-password.html')
 
 	# 为何更新信息时不使用PUT？
 	# 因为Jinja2的HTML表单仅仅支持POST和GET :)
 	elif request.method == 'POST':
 		user_request = request.form
 		if user_request['password'] != user_request['repassword']:
-			return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Not Same', None)
+			return render_template('error.html', output='密码不相同')
 
 		match UserServices.change_password(id, user_request.get('password')):
 			case ReturnCode.SUCCESS:  # TODO:实际上并没有对密码是否和原先的密码重复做判断
 				print('\033[35m[DEBUG]\033[0m | Reset Password | Success : ', id)
 				return redirect(url_for('user.user_login'))
 			case ReturnCode.USER_NOT_EXIST:
-				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+				return render_template('error.html', output='无法查询到用户')
 			case ReturnCode.FAIL:
-				return Response.response(ResponseCode.BAD_REQUEST, 'Password Null', None)
+				return render_template('error.html', output='密码为空')
 			case ReturnCode.PASSWORD_NOT_ALLOWED:
-				return Response.response(ResponseCode.WRONG_PASSWORD, 'Password Format Wrong', None)
+				return render_template('error.html', output='密码格式错误')
 
 
 @user_bp.route('/<id>', methods=['GET', 'POST'])
@@ -230,7 +228,7 @@ def user_info(id):
 		if db_user is None:
 			return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
 
-		return render_template('info.html',
+		return render_template('user/info.html',
 		                       id=db_user.id,
 		                       username=db_user.username,
 		                       name=db_user.name,
@@ -245,17 +243,17 @@ def user_info(id):
 			case ReturnCode.SUCCESS:
 				return redirect(url_for("user.user_info", id=id))
 			case ReturnCode.USER_NOT_EXIST:
-				return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, 'Could Not Find The User', None)
+				return render_template('error.html', output='用户不存在')
 			case ReturnCode.USERNAME_NOT_ALLOWED:
-				return Response.response(ResponseCode.BAD_REQUEST, 'Username Format Wrong', None)
+				return render_template('error.html', output='Username格式错误')
 			case ReturnCode.USERNAME_REPEATED:
-				return Response.response(ResponseCode.USERNAME_REPEATED, 'Username Has Been Registered', None)
+				return render_template('error.html', output='Username重复')
 			case ReturnCode.GENDER_NOT_ALLOWED:
-				return Response.response(ResponseCode.BAD_REQUEST, 'Enter True Gender', None)
+				return render_template('error.html', output='输入正确的性别')
 			case ReturnCode.MAIL_NOT_ALLOWED:
-				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Format Wrong', None)
+				return render_template('error.html', output='邮箱错误')
 			case ReturnCode.MAIL_REPEATED:
-				return Response.response(ResponseCode.BAD_REQUEST, 'Mail Has Been Registered', None)
+				return render_template('error.html', output='邮箱已存在')
 
 
 @user_bp.route('/redirect/login', methods=['GET'])
@@ -270,10 +268,15 @@ def update_info(id):
 	if db_user is None:
 		return "THIS IS TEST"
 
-	return render_template('update.html',
+	return render_template('user/update.html',
 	                       id=id,
 	                       username=db_user.username,
 	                       name=db_user.name,
 	                       phone=db_user.phone,
 	                       mail=db_user.mail,
 	                       gender=db_user.gender)
+
+@user_bp.route('/tools/sessionclear', methods=['GET'])
+def clear_session():
+	session.clear()
+	return redirect(url_for('user.user_login'))

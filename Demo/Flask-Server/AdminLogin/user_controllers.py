@@ -7,7 +7,7 @@ user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/',methods=['GET'])
 def home():
-	return render_template('login.html')
+	return render_template('user/login.html')
 
 
 @user_bp.route('/admin',methods=['GET'])
@@ -22,7 +22,7 @@ def admin():
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'GET':
-		return render_template('login.html')
+		return render_template('user/login.html')
 	if request.method == 'POST':
 		username = request.form['username']
 		password = request.form['password']
@@ -38,7 +38,7 @@ def login():
 		else:
 			flash('用户名或密码错误')
 
-		return render_template('login.html')
+		return render_template('user/login.html')
 
 
 @user_bp.route('/add_user', methods=['GET', 'POST'])

@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+#ir1i {
+    height: 750px;
+}
+
+#ihdt9 {
+    position: absolute;
+    text-align: center;
+    margin: 230px 0px 0px 0px;
+    font-size: 70px;
+    border: 0px double;
+}
+
+
+.htmlpage-row {
+    display: table;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    width: 100%;
+}
+
+.htmlpage-cell {
+    width: 8%;
+    display: table-cell;
+    height: 75px;
+}
+
+.c2199 {
+    color: black;
+    width: 750px;
+    height: 750px;
+    margin: 35px 10px 10px 870px;
+}
+
+@media (max-width: 768px) {
+    .htmlpage-cell {
+        width: 100%;
+        display: block;
+    }
+}
