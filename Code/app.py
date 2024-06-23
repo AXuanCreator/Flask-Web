@@ -38,10 +38,14 @@ def create_app():
 
 app = create_app()
 
+
+########################################################################
 # 首页
+########################################################################
 @app.route('/', methods=['GET'])
 def main():
 	return render_template('main.html')
+
 
 if __name__ == '__main__':
 	app.run()

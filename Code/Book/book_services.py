@@ -4,6 +4,7 @@ from Config import Book, ReturnCode, db, BookCategory, Borrow
 from Recommend import infer
 from sqlalchemy import func
 
+
 class BookServices:
 
 	@staticmethod
@@ -82,13 +83,14 @@ class BookServices:
 	def recommend_book(id):
 		"""推荐书籍"""
 		borrow_list = [borrow.book_id for borrow in Borrow.query.filter_by(user_id=id)]
-		book_list = [ book.id for book in Book.query.order_by(func.random()).limit(5).all()]
+		book_list = [book.id for book in Book.query.order_by(func.random()).limit(5).all()]
 
 		if borrow_list is None:
 			return None
 
 		recommend_list = infer(borrow_list, book_list)
-		recommend_list = [book_id for book_id, rating in zip(book_list, recommend_list) if rating > 3.7]    # TODO : 为什么是3.7为分界点呢，因为模型有点问题，收敛3.7左右
+		recommend_list = [book_id for book_id, rating in zip(book_list, recommend_list) if
+		                  rating > 3.7]  # TODO : 为什么是3.7为分界点呢，因为模型有点问题，收敛3.7左右
 
 		if recommend_list is None:
 			return None

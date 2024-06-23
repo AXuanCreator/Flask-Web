@@ -1,5 +1,5 @@
 ############################### VERSION 1.0 ###############################
-# 此模块用于定义Database模型
+# 此模块用于定义ORM模型
 # 该模块可用于多个数据库，如MySQL，Oracle，且无需改动代码
 ############################### VERSION 1.0 ###############################
 
@@ -65,6 +65,7 @@ class Borrow(db.Model):
 	user_id = db.Column(db.BigInteger, db.ForeignKey('tb_user.id'))
 	book_id = db.Column(db.BigInteger, db.ForeignKey('tb_book.id'))
 
+
 class BookRating(db.Model):
 	__tablename__ = 'tb_book_rating'
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
@@ -72,6 +73,6 @@ class BookRating(db.Model):
 
 	user_id = db.Column(db.BigInteger)
 	book_id = db.Column(db.BigInteger)
-	# # Foreign Key
-	# user_id = db.Column(db.BigInteger, db.ForeignKey('tb_user.id'))
-	# book_id = db.Column(db.BigInteger, db.ForeignKey('tb_book.id'))
+# # Foreign Key
+# user_id = db.Column(db.BigInteger, db.ForeignKey('tb_user.id'))
+# book_id = db.Column(db.BigInteger, db.ForeignKey('tb_book.id'))

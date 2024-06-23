@@ -8,6 +8,12 @@ from .user_services import UserServices
 user_bp = Blueprint('user', __name__)
 
 
+########################################################################
+# 拦截器
+# 当访问除 UserConfig.ALLOW_PATH 和 /user开头/code结尾 的URL外
+# 其他URL都会检测Session的user_login是否存在内容，即已验证
+# 若未经过验证，则导航到user_login中
+########################################################################
 @user_bp.before_request
 def user_login_interceptor():
 	if request.path.startswith('/user'):
@@ -20,11 +26,20 @@ def user_login_interceptor():
 			return redirect(url_for('user.user_login'))  # 重新导航到/login视图函数，需要包含蓝图名称
 
 
+########################################################################
+# test路由，真实URL为 /user/test
+# 仅用于测试
+########################################################################
 @user_bp.route('/test')
 def test():
 	return render_template('error.html', output='Username格式错误')
 
 
+########################################################################
+# Login路由，真实URL为 /user/login
+# GET请求返回登陆页面
+# POST请求验证登陆结果
+########################################################################
 @user_bp.route('/login', methods=['GET', 'POST'])
 def user_login():
 	print(session.get('user_login'))
@@ -64,6 +79,11 @@ def user_login():
 				print('\033[34m[WARN]\033[0m | Controller-->Login | Unexpected Output')
 
 
+########################################################################
+# Register路由，真实URL为 /user/register
+# GET请求有两种作用：1.检测session是否存在用户信息，若有，则将信息载入到数据库；2.返回注册页面
+# POST请求：将Register页面的内容载入到Session中
+########################################################################
 @user_bp.route('/register', methods=['GET', 'POST'])
 def user_register():
 	# GET请求分为两种
@@ -117,6 +137,10 @@ def user_register():
 		return redirect(url_for('user.user_send_code'))  # GET请求，因为从Session中获取信息
 
 
+########################################################################
+# Deregister路由，真实URL为 /user/<id>/deregister
+# GET请求：注销用户
+########################################################################
 @user_bp.route('/<id>/deregister', methods=['GET'])
 def user_deregister(id):
 	if request.method == 'GET':
@@ -139,6 +163,11 @@ def user_deregister(id):
 		return redirect(url_for('user.user_send_code'))
 
 
+########################################################################
+# SendCode路由，真实URL为 /user/send-code
+# GET请求：向Session存储的邮箱用户发送验证码
+# POST请求：向指定邮箱用户发送验证码
+########################################################################
 @user_bp.route('/send-code', methods=['GET', 'POST'])
 def user_send_code():
 	# GET请求负责两种情况：
@@ -167,6 +196,11 @@ def user_send_code():
 				return render_template('error.html', output='邮箱错误')
 
 
+########################################################################
+# CheckCode路由，真实URL为 /user/<mail>/code
+# GET请求：返回检验验证码的页面
+# POST请求：检验验证码是否正确
+########################################################################
 @user_bp.route('/<mail>/code', methods=['GET', 'POST'])
 def user_verify_code(mail):
 	if request.method == 'GET':
@@ -178,6 +212,7 @@ def user_verify_code(mail):
 				print('\033[35m[DEBUG]\033[0m | Verify Code POST | Session : ', session)
 
 				# 当Session存有Register信息时，则代表此时为注册状态
+				# 当Session存有Deregister信息时，则表示此时为注销状态
 				# 若无，则代表此时在重置密码阶段
 				# 注意，这种写法较为暴力，但在验证码使用场景较少时简单有效
 				if session.get('register') is not None and session.get('register'):
@@ -196,6 +231,11 @@ def user_verify_code(mail):
 				return render_template('error.html', output='邮箱错误')
 
 
+########################################################################
+# ChangePassword路由，真实URL为 /user/<id>/password
+# GET请求：返回重置密码的页面
+# POST请求：更改密码
+########################################################################
 @user_bp.route('/<id>/password', methods=['GET', 'POST'])
 def user_change_password(id):
 	# 该视图函数需要验证状态
@@ -221,6 +261,11 @@ def user_change_password(id):
 				return render_template('error.html', output='密码格式错误')
 
 
+########################################################################
+# Info路由，真实URL为 /user/<id>
+# GET请求：返回用户信息
+# POST请求：更改用户信息
+########################################################################
 @user_bp.route('/<id>', methods=['GET', 'POST'])
 def user_info(id):
 	if request.method == 'GET':
@@ -256,6 +301,9 @@ def user_info(id):
 				return render_template('error.html', output='邮箱已存在')
 
 
+########################################################################
+# 以下的路由都是一些测试用路由
+########################################################################
 @user_bp.route('/redirect/login', methods=['GET'])
 def redirect_login():
 	del session['user_login']
@@ -275,6 +323,7 @@ def update_info(id):
 	                       phone=db_user.phone,
 	                       mail=db_user.mail,
 	                       gender=db_user.gender)
+
 
 @user_bp.route('/tools/sessionclear', methods=['GET'])
 def clear_session():
