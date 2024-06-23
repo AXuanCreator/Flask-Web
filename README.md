@@ -8,7 +8,7 @@
 
 </br>
 
-看点：
+特点：
 
 * 基于深度学习的图书推荐(测试中)
 * 邮箱验证码
@@ -23,9 +23,11 @@
 
 </br>
 
+假如你在阅览本项目时发现问题或者有疑惑，欢迎提交ISSUE或者向 axuan.me@outlook.com 发送邮件
+
 </br>
 
-
+</br>
 
 ## 项目文件结构
 
@@ -45,9 +47,9 @@ Flask-Web
 
 有两种方式
 
-* **[推荐]** 看Bilibili教学视频，该视频基本是跟着Demo录的  [Flask不太专业的实战教程](https://www.bilibili.com/video/BV121421C7kt/?spm_id_from=333.788&vd_source=c9b8ab6fce6b4986cf89061f00aa9dc4)
+* **[推荐]** 看Bilibili教学视频，该视频基本是跟着Demo录的  [Flask不太专业的实战教程](https://www.bilibili.com/video/BV121421C7kt/?spm_id_from=333.788&vd_source=c9b8ab6fce6b4986cf89061f00aa9dc4)，然后结合Docs/Flask教程一起看
 
-* 看Docs文件夹下的Demo解析
+* 直接看Docs文件夹下的Flask教程
 
 
 

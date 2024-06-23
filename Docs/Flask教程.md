@@ -1,3 +1,9 @@
+本文档是对Demo文件夹下的代码进行解析，并含括了Flask的知识点
+
+可以结合 [Flask不太专业的实战教程](https://www.bilibili.com/video/BV121421C7kt/?spm_id_from=333.788&vd_source=c9b8ab6fce6b4986cf89061f00aa9dc4) 一同阅读
+
+
+
 # Demo_1
 
 >  知识点 ： **Debug模式 ||  Host修改 ||  Port修改**
