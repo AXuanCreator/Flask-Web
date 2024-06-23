@@ -31,9 +31,9 @@ conda install pytorch tqdm pandas -y 	# 基于深度学习的书籍推荐
 
 ## 注意事项
 
-需要在Pycharm中将Flask-Web/Code文件夹设置为 **源代码根目录**，一切相对路径都是相对于Code文件夹。否则将会出现导入包路径错误但依旧能正常运行
+1. 需要在Pycharm中将Flask-Web/Code文件夹设置为 **源代码根目录**，一切相对路径都是相对于Code文件夹。否则将会出现导入包路径错误但依旧能正常运行
 
-
+2. Code/Dataset 和 Code/Recommend 是深度学习相关代码，还在测试中，可以不看，仅影响书籍推荐模块
 
 ## 代码模板
 
