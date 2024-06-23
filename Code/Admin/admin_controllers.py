@@ -20,24 +20,22 @@ def login():
         return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '管理员不存在', 0)
 
 
-@admin_bp.route('/<int:id>', methods=['GET'])
-def query_admin_info(id):
-    """获取管理员的基本信息"""
-    admin = AdminService.get_admin_by_id(id)
-    if admin:
-        return Response.response(ResponseCode.SUCCESS, '查询成功', Helper.to_dict(admin))
-    return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '用户不存在', 0)
-
-
-@admin_bp.route('/<int:id>', methods=['PUT'])
-def modify_admin_info(id):
-    """修改管理员的基本信息"""
-    res_code = AdminService.update_admin(id, request.get_json())
-    if res_code == 1:
-        return Response.response(ResponseCode.SUCCESS, '修改成功', id)
-    if res_code == -1:
-        return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '管理员不存在', 0)
-    return Response.response(ResponseCode.FAILED, '系统错误', 0)
+@admin_bp.route('/<int:id>', methods=['GET', 'PUT'])
+def admin_info(id):
+    if request.method == 'GET':
+        """获取管理员的基本信息"""
+        admin = AdminService.get_admin_by_id(id)
+        if admin:
+            return Response.response(ResponseCode.SUCCESS, '查询成功', Helper.to_dict(admin))
+        return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '用户不存在', 0)
+    elif request.method == 'PUT':
+        """修改管理员的基本信息"""
+        res_code = AdminService.update_admin(id, request.get_json())
+        if res_code == 1:
+            return Response.response(ResponseCode.SUCCESS, '修改成功', id)
+        if res_code == -1:
+            return Response.response(ResponseCode.ACCOUNT_NOT_EXIST, '管理员不存在', 0)
+        return Response.response(ResponseCode.FAILED, '系统错误', 0)
 
 
 @admin_bp.route('/<int:id>/password', methods=['PUT'])
