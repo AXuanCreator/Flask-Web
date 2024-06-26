@@ -42,9 +42,14 @@ def test():
 ########################################################################
 @user_bp.route('/login', methods=['GET', 'POST'])
 def user_login():
-	print(session.get('user_login'))
+	print('\033[35m[DEBUG]\033[0m | Login | Session | User Login Status : ', session.get('user_login'))
+	print('\033[35m[DEBUG]\033[0m | Login | Session | User Register Status : ', session.get('register'))
 	if request.method == 'GET':
 		if session.get('user_login'):
+			# 对注册信息进行清空
+			if session.get('register') is not None:
+				session['register'] = False  # 防御性
+
 			db_user = User.query.filter_by(username=session['user_login']).first()
 			if db_user is not None:
 				return redirect(url_for('user.user_info', id=db_user.id))
@@ -91,6 +96,8 @@ def user_register():
 	# 2.若无，则显示Register的页面信息
 	if request.method == 'GET':
 		if session.get('register') is not None and session['register']:
+			# 关闭注册状态
+			session['register'] = False
 			match UserServices.register(session, commit=True):
 				case ReturnCode.SUCCESS:
 					# 清空Session中的注册信息
